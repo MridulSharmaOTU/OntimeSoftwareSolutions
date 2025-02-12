@@ -8,7 +8,7 @@ On-Time Software Solutions
 Rick Fraser, Saeem Patel, Mridul Sharma, Kseniya Kolokolkina, and Mathew Lee
 ### Roles:
 Project Manager: Rick Fraser<br>
-Technical Manager: Mirdul Sharma<br>
+Technical Manager: Mridul Sharma<br>
 Front-End Lead: Matthew Lee<br>
 Back-End Lead: Kseniya Kolokolkina<br>
 Software Quality Lead: Saeem Patel<br>
