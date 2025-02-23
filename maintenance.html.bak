@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaProject - Maintenance</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a; /* Almost black */
+            font-family: 'Times New Roman', Times, serif;
+            color: white;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #ff4d4d; /* Gothic red */
+            font-size: 3em;
+            text-shadow: 2px 2px 8px #000000; /* Gothic shadow */
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            border: 3px solid #ff4d4d; /* Gothic red border */
+            box-shadow: 0 0 10px #000000; /* Gothic shadow */
+        }
+        p {
+            margin-top: 20px;
+            font-size: 1.5em;
+            text-shadow: 2px 2px 8px #000000; /* Gothic shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AlphaProject</h1>
+        <img src="images/angel-image.png" alt="Dark Angel Image">
+        <p>Website under construction</p>
+    </div>
+</body>
+</html>
