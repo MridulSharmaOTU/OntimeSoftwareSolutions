@@ -1,9 +1,13 @@
 .carousel-control-next{
-    right:15% !important;
-}
-.carousel-control-prev{
-    left:15% !important;
+    right:25% !important;
 }
 .mt-8{
     margin-top: 8rem;
-  }
+}
+/* .carousel-inner p{
+    color:red;
+} */
+/* body{
+    backdrop-filter: blur(50px);
+    background-image: url("images/Background.png");
+} */
