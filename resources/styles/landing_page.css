@@ -1,6 +1,6 @@
 @font-face {
     font-family: GodOfWar;
-    src: url("/resources/fonts/GODOFWAR.TTF") format("truetype");
+    src: url("../fonts/GODOFWAR.TTF") format("truetype");
 }
 .gow-font-1 {
     font-family: 'GodOfWar', Arial, sans-serif;
