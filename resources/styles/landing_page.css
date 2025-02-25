@@ -1,0 +1,51 @@
+.carousel-control-next{
+    right:25% !important;
+}
+.mt-8{
+    margin-top: 8rem;
+}
+@font-face {
+    font-family: GodOfWar;
+    src: url("/resources/fonts/GODOFWAR.TTF") format("truetype");
+}
+.custom-font-1 {
+    font-family: 'GodOfWar', Arial, sans-serif;
+    font-size: 3em;
+    text-decoration: none;
+    color: darkred;
+    text-align: left;
+    text-shadow: 2px 2px 2px black;
+}
+.custom-font-2 {
+    font-family: 'GodOfWar', Arial, sans-serif;
+    font-size: 3em;
+    text-decoration: none;
+    color: darkgoldenrod;
+    text-align: left;
+    text-shadow: 2px 2px 2px black;
+}
+.nav-font {
+    font-family: 'GodOfWar', Arial, sans-serif;
+    font-size: 3em;
+    text-decoration: none;
+    color: darkslategrey;
+    text-align: left;
+}
+/* Account Badge */
+.badge {
+    width: 64px;
+    height: 64px;
+}
+
+/* Right-align the search bar */
+.form-inline {
+    margin-left: auto;
+    margin-right: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-inline input {
+    width: 15em; /* Adjust the width as needed */
+}
+
