@@ -8,44 +8,117 @@
     font-family: GodOfWar;
     src: url("/resources/fonts/GODOFWAR.TTF") format("truetype");
 }
-.custom-font-1 {
+.gow-font-1 {
     font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: 3em;
+    font-size: calc(1rem + 1vw);
     text-decoration: none;
     color: darkred;
     text-align: left;
     text-shadow: 2px 2px 2px black;
 }
-.custom-font-2 {
+.gow-font-2 {
     font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: 3em;
+    font-size: calc(1rem + 1vw);
     text-decoration: none;
     color: darkgoldenrod;
     text-align: left;
     text-shadow: 2px 2px 2px black;
 }
+.news-feed-font-title {
+    font-family: 'GodOfWar', Arial, sans-serif;
+    font-size: calc(1rem + 1vw);
+    text-decoration: none;
+    color: #111;
+    text-align: center;
+    text-shadow: 2px 2px 2px black;
+}
 .nav-font {
     font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: 3em;
+    font-size: calc(1rem + 1vw);
     text-decoration: none;
-    color: darkslategrey;
+    color: #aaa;
     text-align: left;
 }
-/* Account Badge */
-.badge {
-    width: 64px;
-    height: 64px;
-}
-
-/* Right-align the search bar */
-.form-inline {
-    margin-left: auto;
-    margin-right: 0;
+.search-container {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 0;
 }
-
-.form-inline input {
-    width: 15em; /* Adjust the width as needed */
+.search-bar {
+    width: calc(10em + 1vw);
+    /*max-width: 400px;*/
+    border: 1px solid darkgray;
+    border-radius: 4px;
 }
-
+.search-button {
+    padding: 0.2em 0.5em;
+    margin-left: 0.5em;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(0.2rem + 1vw);
+    background-color: darkslategrey;
+}
+.nav-links {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+.nav-links li {
+    margin: 0 calc(0.1rem + 1vw);
+}
+.nav-links a {
+    text-decoration: none;
+    color: #aaa;
+}
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: #aaa;
+    margin: 4px 0;
+}
+@media (max-width: 1200px) {
+    .nav-font {
+        font-size: calc(0.5rem + 1vw);
+    }
+}
+@media (max-width: 900px) {
+    .nav-font {
+        font-size: calc(0.25rem + 1vw);
+    }
+}
+@media (max-width: 800px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+    }
+    .menu-toggle {
+        display: flex;
+    }
+}
+@media (max-width: 300px) {
+    .search-container {
+        flex-direction: column;
+    }
+    .search-bar {
+        width: 100%;
+        margin-bottom: 0.5em;
+    }
+    .search-button {
+        width: 100%;
+    }
+}
