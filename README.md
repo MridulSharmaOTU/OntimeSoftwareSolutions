@@ -12,6 +12,11 @@ Technical Manager: Mridul Sharma<br>
 Front-End Lead: Matthew Lee<br>
 Back-End Lead: Kseniya Kolokolkina<br>
 Software Quality Lead: Saeem Patel<br>
+Front-End Team: Matthew Lee, Saeem Patel, Rick Fraser<br>
+Back-End Lead: Kseniya Kolokolkina<br>
+Back-End Team: Kseniya Kolokolkina, Mridul Sharma, Rick Fraser<br>
+Software Quality Lead: Saeem Patel<br>
+Quality Team: Saeem Patel, Mirdul Sharma<br>
 Developers: All
 
 ### Pipeline:
