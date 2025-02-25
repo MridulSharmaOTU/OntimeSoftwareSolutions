@@ -1,4 +1,4 @@
-ID,Title,Description,Genre Tags,Release Date,Platform,Developer/Publisher,Age Rating,Reviews and Ratings,Number of 1-star Ratings,Number of 2-star Ratings,Number of 3-star Ratings,Number of 4-star Ratings,Number of 5-star Ratings,Average Completion Time
+ID,Title,Description,Genre Tags,Release Date,Platform,Developer/Publisher,Age,Rating,Number of 1-star Ratings,Number of 2-star Ratings,Number of 3-star Ratings,Number of 4-star Ratings,Number of 5-star Ratings,Average Completion Time
 1,"The Legend of Zelda: Breath of the Wild","An open-world action-adventure game set in the kingdom of Hyrule.","Action|Adventure|RPG","2017-03-03","Nintendo Switch","Nintendo","E10+","4.9/5",0,0,0,0,0,"50 hours"
 2,"Red Dead Redemption 2","An epic tale of life in America at the dawn of the modern age.","Action|Adventure","2018-10-26","PlayStation|Xbox","Rockstar Games","M","4.8/5",0,0,0,0,0,"60 hours"
 3,"God of War","A story-driven action-adventure game set in the world of Norse mythology.","Action|Adventure","2018-04-20","PlayStation","Santa Monica Studio/SIE","M","4.9/5",0,0,0,0,0,"30 hours"
