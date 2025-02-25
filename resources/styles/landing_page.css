@@ -1,9 +1,3 @@
-.carousel-control-next{
-    right:25% !important;
-}
-.mt-8{
-    margin-top: 8rem;
-}
 @font-face {
     font-family: GodOfWar;
     src: url("/resources/fonts/GODOFWAR.TTF") format("truetype");
