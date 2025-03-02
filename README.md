@@ -28,10 +28,8 @@ Database Technology: SQL<br>
 Communication: Discord
 
 ### Group Meetings:
-Tuesdays (12:30 pm - 2:00 pm) Boardroom ERC-2024<br>
-##### Pending
-Mondays ERC 2024 (8:00 am - 9:30 am) (Pending)<br>
-Thursdays ERC 2024 (8:00 am - 9:30 am) (Pending)<br> 
+Tuesdays (10:00 am - 11:00 am) Boardroom ERC-2024<br>
+(Note: Please be there at 10:30 am for the weekly scrum.)
 
 ### Working Methods: 
 Pair programming (In-person, Tuesdays)<br> 
