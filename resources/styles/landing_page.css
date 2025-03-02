@@ -6,28 +6,11 @@
     font-family: 'GodOfWar', Arial, sans-serif;
     font-size: calc(1rem + 1vw);
     text-decoration: none;
-    color: darkred;
     text-align: left;
-    text-shadow: 2px 2px 2px black;
-}
-.gow-font-2 {
-    font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: calc(1rem + 1vw);
-    text-decoration: none;
-    color: darkgoldenrod;
-    text-align: left;
-    text-shadow: 2px 2px 2px black;
-}
-.news-feed-font-title {
-    font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: calc(1rem + 1vw);
-    text-decoration: none;
-    color: #111;
-    text-align: center;
     text-shadow: 2px 2px 2px black;
 }
 .nav-font {
-    font-family: 'GodOfWar', Arial, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
     font-size: calc(1rem + 1vw);
     text-decoration: none;
     color: #aaa;
