@@ -99,7 +99,7 @@
     padding:0 !important;
 }
 
-#full-star{
+.full-star{
     color: #FFD700;
     font-size: 2em;
 }
@@ -108,7 +108,7 @@
     padding:0 !important;
 }
 
-#game{
+.game{
     transition: transform 0.5s;
 }
 
@@ -116,10 +116,15 @@
     transform: scale(1.05);
 }
 
-#login-dropdown{
+.login-dropdown{
     color:white;;
 }
 
-#login-dropdown:hover{
+.login-dropdown:hover{
     color: #3d3d3d;
+}
+#game-description{
+    border: #1a1a1a solid 5px;
+    border-radius: 2rem;
+    padding: 1rem 1rem 1rem 1rem;
 }
