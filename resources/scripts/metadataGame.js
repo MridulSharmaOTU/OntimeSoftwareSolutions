@@ -47,4 +47,41 @@ FUNCTION getGameMetadataById(id):
     END CALL
 END FUNCTION
 
+function getGameMetadataById(id) {
+  let gamesPromise = loadMetadataGames()
+
+  fulfilledHandler = (games) => {
+	let game = games.find((item) => {
+		return item.ID == id
+	})
+
+	if (game == null) {
+	  return null
+	}
+
+	let formattedPlatform = ""
+	if (game.Platform != null) {
+	  let platformList = game.Platform.split("|")
+	  for (let i = 0; i < platformList.length; i++) {
+		platformList[i] = platformList[i].trim()
+	  }
+	  formattedPlatform = platformList.join(", ")
+	}
+
+	let metadata = {
+        Title: game.Title,
+        Description: game.Description,
+        Genre: game.Genre != null ? game.Genre : game["Genre Tag"],
+        "Release Date": game["Release Date"],
+        Platform: formattedPlatform,
+        "Developer/Publisher": game["Developer/Publisher"],
+        Age: game.Age,
+        Rating: game.Rating,
+        "Average Completion Time": game["Average Completion Time"]
+    }
+	return metadata
+  }
+  return gamesPromise.then(fulfilledHandler)
+}
+
 export { getGameMetadataById };
