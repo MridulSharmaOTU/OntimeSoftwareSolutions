@@ -112,3 +112,19 @@
 .navbar{
     padding:0 !important;
 }
+
+#game{
+    transition: transform 0.5s;
+}
+
+#game:hover{
+    transform: scale(1.05);
+}
+
+#login-dropdown{
+    color:white;;
+}
+
+#login-dropdown:hover{
+    color: #3d3d3d;
+}

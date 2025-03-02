@@ -19,10 +19,30 @@
                 <span></span>
                 <span></span>
             </div>
+            <a style="color:rgb(48, 47, 47)" href="index.html"><i class="fa-solid fa-house" style="padding-left: 1rem; padding-right: 1rem; font-size:2rem"></i></a>
             <!-- Nav Headers -->
             <ul class="nav nav-links" id="nav-links">
-                <li><a class="nav-link nav-font">Console</a></li>
-                <li><a class="nav-link nav-font">Genre</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Console</a>
+                    <ul class = "dropdown-menu bg-dark">
+                        <li><a class="dropdown-item">Xbox</a></li>
+                        <li><a class="dropdown-item">PlayStation</a></li>
+                        <li><a class="dropdown-item">Nintendo Switch</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Genre</a>
+                    <ul class = "dropdown-menu bg-dark">
+                        <li><a class="dropdown-item">Action</a></li>
+                        <li><a class="dropdown-item">Adventure</a></li>
+                        <li><a class="dropdown-item">RPG</a></li>
+                        <li><a class="dropdown-item">Platformer</a></li>
+                        <li><a class="dropdown-item">Simulation</a></li>
+                        <li><a class="dropdown-item">Shooter</a></li>
+                        <li><a class="dropdown-item">Horror</a></li>
+                        <li><a class="dropdown-item">Racing</a></li>
+                    </ul>
+                </li>
                 <li><a class="nav-link nav-font">Rating</a></li>
                 <li><a class="nav-link nav-font">Favourites</a></li>
             </ul>
@@ -31,10 +51,16 @@
                 <button class="search-button">Search</button>
             </div>
             <!-- Account Badge -->
-            <ul class="navbar-nav"></ul>
-            <a>
-                <i class="fa-solid fa-user" style="padding-left: 1rem; padding-right: 1rem; font-size:2rem"></i>
-            </a>
+            <div class="dropdown">
+                <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> 
+                    <i class="fa-solid fa-user" style="padding-left: 1rem; padding-right: 1rem; font-size: 2rem; color:rgb(48, 47, 47)"></i>
+                </a>
+                <ul class = "dropdown-menu bg-dark">
+                    <li><a class="dropdown-item" id="login-dropdown">Sign Up</a></li>
+                    <li><a class="dropdown-item" id="login-dropdown">Sign In</a></li>
+                </ul>
+            </li>
+            
         </div>
     </nav>
     <div class="container mt-5">
