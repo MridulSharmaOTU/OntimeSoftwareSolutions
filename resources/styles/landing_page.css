@@ -1,9 +1,5 @@
-/* @font-face {
-    font-family: GodOfWar;
-    src: url("../fonts/GODOFWAR.TTF") format("truetype");
-}  */
-.gow-font-1 {
-    font-family: 'GodOfWar', Arial, sans-serif;
+.heading-font {
+    font-family: Helvetica, Arial, sans-serif;
     font-size: calc(1rem + 1vw);
     text-decoration: none;
     text-align: left;
@@ -25,7 +21,6 @@
 }
 .search-bar {
     width: calc(10em + 1vw);
-    /*max-width: 400px;*/
     border: 1px solid darkgray;
     border-radius: 4px;
 }
