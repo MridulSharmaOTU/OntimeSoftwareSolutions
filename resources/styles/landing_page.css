@@ -1,34 +1,17 @@
-@font-face {
+/* @font-face {
     font-family: GodOfWar;
-    src: url("/resources/fonts/GODOFWAR.TTF") format("truetype");
-}
+    src: url("../fonts/GODOFWAR.TTF") format("truetype");
+}  */
 .gow-font-1 {
     font-family: 'GodOfWar', Arial, sans-serif;
     font-size: calc(1rem + 1vw);
     text-decoration: none;
-    color: darkred;
     text-align: left;
-    text-shadow: 2px 2px 2px black;
-}
-.gow-font-2 {
-    font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: calc(1rem + 1vw);
-    text-decoration: none;
-    color: darkgoldenrod;
-    text-align: left;
-    text-shadow: 2px 2px 2px black;
-}
-.news-feed-font-title {
-    font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: calc(1rem + 1vw);
-    text-decoration: none;
-    color: #111;
-    text-align: center;
     text-shadow: 2px 2px 2px black;
 }
 .nav-font {
-    font-family: 'GodOfWar', Arial, sans-serif;
-    font-size: calc(1rem + 1vw);
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: calc(1rem + 0.2vw);
     text-decoration: none;
     color: #aaa;
     text-align: left;
@@ -115,4 +98,17 @@
     .search-button {
         width: 100%;
     }
+}
+
+.img-thumbnail{
+    padding:0 !important;
+}
+
+#full-star{
+    color: #FFD700;
+    font-size: 2em;
+}
+
+.navbar{
+    padding:0 !important;
 }
