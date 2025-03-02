@@ -11,7 +11,7 @@
 }
 .nav-font {
     font-family: Helvetica, Arial, sans-serif;
-    font-size: calc(1rem + 1vw);
+    font-size: calc(1rem + 0.2vw);
     text-decoration: none;
     color: #aaa;
     text-align: left;
@@ -98,4 +98,17 @@
     .search-button {
         width: 100%;
     }
+}
+
+.img-thumbnail{
+    padding:0 !important;
+}
+
+#full-star{
+    color: #FFD700;
+    font-size: 2em;
+}
+
+.navbar{
+    padding:0 !important;
 }
