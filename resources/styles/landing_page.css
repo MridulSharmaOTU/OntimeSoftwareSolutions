@@ -5,6 +5,14 @@
     text-align: left;
     text-shadow: 2px 2px 2px black;
 }
+.heading-font-gamepage {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1.8rem;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 2px black;
+}
 .nav-font {
     font-family: Helvetica, Arial, sans-serif;
     font-size: calc(1rem + 0.2vw);
