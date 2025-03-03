@@ -116,11 +116,11 @@
     padding:0 !important;
 }
 
-.game{
+.game-container{
     transition: transform 0.5s;
 }
 
-#game:hover{
+.game-container:hover{
     transform: scale(1.05);
 }
 
