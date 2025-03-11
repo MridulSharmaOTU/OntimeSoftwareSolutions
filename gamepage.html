@@ -86,13 +86,13 @@
                 <iframe style="height:auto;" style="height: 10rem !important;" src="https://www.youtube.com/embed/E3Huy2cdih0?si=BcLzZfdUaHfRcSTm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
             <div id="ss1" class="col">
-                <img class="img-thumbnail" style="height: 10rem !important;" src="/resources/images/banners/EldenRing.webp" alt="">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/0/ss1.webp" alt="">
             </div>
             <div id="ss2" class="col">
-                <img class="img-thumbnail" style="height: 10rem !important;" src="/resources/images/banners/EldenRing.webp" alt="">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/0/ss2.webp" alt="">
             </div>
             <div id="ss3" class="col">
-                <img class="img-thumbnail" style="height: 10rem !important;" src="/resources/images/banners/EldenRing.webp" alt="">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/0/ss3.webp" alt="">
             </div>
         </div>
     </div>
@@ -161,6 +161,16 @@
             <h2 style="color: white; font-size: medium;">${gameData.Description}</h2>
           `;
 
+          // Update screenshot images based on gameId
+          document.getElementById('ss1').innerHTML = `
+          <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss1.webp" alt="">
+          `;
+          document.getElementById('ss2').innerHTML = `
+          <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss2.webp" alt="">
+          `;
+          document.getElementById('ss3').innerHTML = `
+          <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss3.webp" alt="">
+          `;
           
           // (Optional) You can update other sections here if you want to display more metadata
           // For example, if you had placeholders for genre, release date, etc., you could update them here.
