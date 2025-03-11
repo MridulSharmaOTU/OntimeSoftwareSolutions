@@ -3,53 +3,125 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Video Game List - Game Page</title>
-    <link rel="icon" type="image/x-icon" href="./resources/images/icons/myvgl.ico">
+    <title>My Video Game List</title>
+    <link rel="icon" type="image/x-icon" href="/resources/images/icons/myvgl.ico">
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="./resources/styles/landing_page.css" rel="stylesheet">
+    <link href="./resources/styles/navbar.css" rel="stylesheet">
+    <link href="./resources/styles/images.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <style>
-      /* Additional custom styling for game detail page */
-      body { background-color: #2b2b2b; color: #ccc; }
-      .game-cover { max-width: 300px; }
-      .game-info { background-color: #3c3c3c; border-radius: 4px; padding: 20px; }
-      .info-label { font-weight: bold; color: #fff; }
-      .info-value { margin-left: 5px; }
-    </style>
   </head>
-  <body>
+  <body class="bg-dark">
     <nav class="navbar navbar-expand">
-      <div class="container-fluid navbar">
-          <div class="menu-toggle" id="menu-toggle">
-              <span></span>
-              <span></span>
-              <span></span>
-          </div>
-          <a style="color:rgb(48, 47, 47)" href="index.html"><i class="fa-solid fa-house" style="padding-left: 1rem; padding-right: 1rem; font-size:2rem"></i></a>
-          <!-- (Navigation continues as needed...) -->
-      </div>
+        <div class="container-fluid navbar">
+            <div class="menu-toggle" id="menu-toggle" style="margin-right: 0.5em;">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a style="color:rgb(48, 47, 47)" href="../index.html"><i class="fa-solid fa-house" style="padding-left: 1rem; padding-right: 1rem; font-size:2rem"></i></a>
+            <!-- Nav Headers -->
+            <ul class="nav nav-links" id="nav-links">
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Console</a>
+                    <ul class="dropdown-menu bg-dark">
+                        <li><a class="dropdown-item">Xbox</a></li>
+                        <li><a class="dropdown-item">PlayStation</a></li>
+                        <li><a class="dropdown-item">Nintendo Switch</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Genre</a>
+                    <ul class="dropdown-menu bg-dark">
+                        <li><a class="dropdown-item">Action</a></li>
+                        <li><a class="dropdown-item">Adventure</a></li>
+                        <li><a class="dropdown-item">RPG</a></li>
+                        <li><a class="dropdown-item">Platformer</a></li>
+                        <li><a class="dropdown-item">Simulation</a></li>
+                        <li><a class="dropdown-item">Shooter</a></li>
+                        <li><a class="dropdown-item">Horror</a></li>
+                        <li><a class="dropdown-item">Racing</a></li>
+                    </ul>
+                </li>
+                <li><a class="nav-link nav-font">Rating</a></li>
+                <li><a class="nav-link nav-font">Favourites</a></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search...">
+                <button class="search-button">Search</button>
+            </div>
+            <!-- Account Badge -->
+            <div class="dropdown">
+                <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> 
+                    <i class="fa-solid fa-user" style="padding-left: 1rem; padding-right: 1rem; font-size: 2rem; color:rgb(48, 47, 47)"></i>
+                </a>
+                <ul class="dropdown-menu bg-dark">
+                    <li><a class="dropdown-item login-dropdown">Sign Up</a></li>
+                    <li><a class="dropdown-item login-dropdown">Sign In</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <div class="container mt-4">
-      <div class="row">
-        <!-- Left column: Cover image -->
-        <div class="col-md-4 text-center">
-          <img id="game-cover" class="img-thumbnail game-cover" src="./resources/images/covers/placeholder.jpg" alt="Game Cover">
+    <div class="container mt-5">
+        <div class="row text-center">
+            <div class="col">
+                <div id="gameCarousel1" class="carousel slide" data-ride="carousel">
+                    <div class="card">
+                        <div class="carousel-inner">
+                            <!-- This carousel item will be updated with the game's cover image -->
+                            <div class="carousel-item active">
+                                <img class="w-100 img-thumbnail" src="/resources/images/banners/EldenRing.webp" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Right column: Game metadata -->
-        <div class="col-md-8 game-info">
-          <h2 id="game-title">Loading Game Title...</h2>
-          <p id="game-description">Loading game description...</p>
-          <p><span class="info-label">Genre:</span> <span id="game-genre">N/A</span></p>
-          <p><span class="info-label">Release Date:</span> <span id="game-release-date">N/A</span></p>
-          <p><span class="info-label">Platform:</span> <span id="game-platform">N/A</span></p>
-          <p><span class="info-label">Developer/Publisher:</span> <span id="game-dev-pub">N/A</span></p>
-          <p><span class="info-label">Age:</span> <span id="game-age">N/A</span></p>
-          <p><span class="info-label">Rating:</span> <span id="game-rating">N/A</span></p>
-          <p><span class="info-label">Avg. Completion Time:</span> <span id="game-completion-time">N/A</span></p>
+    </div>
+    <div class="container text-center mt-5">
+        <div class="row g-0">
+            <div class="col">
+                <iframe style="height:auto;" style="height: 10rem !important;" src="https://www.youtube.com/embed/E3Huy2cdih0?si=BcLzZfdUaHfRcSTm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div id="ss1" class="col">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="/resources/images/banners/EldenRing.webp" alt="">
+            </div>
+            <div id="ss2" class="col">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="/resources/images/banners/EldenRing.webp" alt="">
+            </div>
+            <div id="ss3" class="col">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="/resources/images/banners/EldenRing.webp" alt="">
+            </div>
         </div>
-      </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div id="game-description" class="col">
+                <h1 class="heading-font-gamepage">Description</h1>
+                <h2 style="color: white; font-size: medium;">placeholder description</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h1 class="heading-font-gamepage">News</h1>
+                <h2 style="color: white; font-size: medium;">Lorem ipsum odor amet, consectetuer adipiscing elit. Primis blandit vitae mollis
+                    potenti platea ad? Commodo viverra eu metus vehicula nec consectetur. Ante libero id porttitor
+                    himenaeos turpis varius; ultrices leo tellus. Habitasse litora maecenas montes porta ad aptent
+                    et. Habitasse gravida sociosqu egestas tincidunt porta hendrerit ac? Senectus molestie aenean
+                    nulla ultricies laoreet donec consectetur ac. Phasellus pellentesque senectus proin nascetur
+                    ut pellentesque litora penatibus.</h2>
+            </div>
+            <div class="col text-center">
+                <h1 class="heading-font-gamepage">Ratings</h1>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+            </div>
+        </div>
     </div>
     <!-- Bootstrap JS bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
@@ -64,32 +136,34 @@
       const gameId = urlParams.get('id');
 
       if (!gameId) {
-        document.getElementById('game-title').textContent = 'No game ID provided.';
+        document.getElementById('game-description').innerHTML = '<h1>No game ID provided.</h1>';
       } else {
-        // Load the game metadata using the provided function
         getGameMetadataById(gameId).then(gameData => {
           if (!gameData) {
-            document.getElementById('game-title').textContent = 'Game not found.';
-            document.getElementById('game-description').textContent = '';
+            document.getElementById('game-description').innerHTML = '<h1>Game not found.</h1>';
             return;
           }
+          // Remove surrounding quotes from the title
+          const cleanTitle = gameData.Title.replace(/^"|"$/g, '');
+          document.title = cleanTitle;
 
-          document.title = gameData.Title.replace(/^"|"$/g, '');
+          // Update carousel image with dynamic cover based on game ID
+          const carouselImg = document.querySelector('#gameCarousel1 .carousel-item.active img');
+          if (carouselImg) {
+            carouselImg.src = './resources/images/games/' + gameId + '/banner.webp';
+            carouselImg.alt = `Cover image for ${cleanTitle}`;
+          }
 
-          document.getElementById('game-title').textContent = gameData.Title;
-          document.getElementById('game-description').textContent = gameData.Description;
-          document.getElementById('game-genre').textContent = gameData.Genre || 'N/A';
-          document.getElementById('game-release-date').textContent = gameData['Release Date'] || 'N/A';
-          document.getElementById('game-platform').textContent = gameData.Platform || 'N/A';
-          document.getElementById('game-dev-pub').textContent = gameData['Developer/Publisher'] || 'N/A';
-          document.getElementById('game-age').textContent = gameData.Age || 'N/A';
-          document.getElementById('game-rating').textContent = gameData.Rating || 'N/A';
-          document.getElementById('game-completion-time').textContent = gameData['Average Completion Time'] || 'N/A';
+          // Update the description section with the game's description
+          const descSection = document.getElementById('game-description');
+          descSection.innerHTML = `
+            <h1 class="heading-font-gamepage">Description</h1>
+            <h2 style="color: white; font-size: medium;">${gameData.Description}</h2>
+          `;
 
-          // Build the cover image source based on the game ID
-          const coverImg = document.getElementById('game-cover');
-          coverImg.src = './resources/images/games/' + gameId + '/banner.webp';
-          coverImg.alt = `Cover image for ${gameData.Title}`;
+          
+          // (Optional) You can update other sections here if you want to display more metadata
+          // For example, if you had placeholders for genre, release date, etc., you could update them here.
         });
       }
     </script>
