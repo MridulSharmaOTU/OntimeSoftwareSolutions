@@ -1,5 +1,25 @@
 // metadataGame.js
-import { loadMetadataGames } from './parser.js';
+import { parseCSV } from './parser.js';
+
+/**
+ * Loads the metadataGames.csv file from the resources/database folder and parses it.
+ * @returns {Promise<Array<Object>>} - A promise that resolves to the parsed CSV data.
+ */
+function loadMetadataGames() {
+  // Adjust the path as necessary to match your folder structure
+  return fetch('resources/database/metadataGames.csv')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      return response.text();
+    })
+    .then(csvText => parseCSV(csvText))
+    .catch(error => {
+      console.error('Error fetching or parsing metadataGames.csv:', error);
+      return [];
+    });
+}
 
 /**
  * Retrieves metadata for a game based on its ID.
@@ -19,6 +39,10 @@ function getGameMetadataById(id) {
 	  return null
 	}
 
+  const formattedGenre = game["Genre Tags"] 
+      ? game["Genre Tags"].split('|').map(item => item.trim()).join(', ')
+      : "";
+
 	const formattedPlatform = game.Platform 
       ? game.Platform.split('|').map(item => item.trim()).join(', ')
       : "";
@@ -26,7 +50,7 @@ function getGameMetadataById(id) {
 	let metadata = {
         Title: game.Title,
         Description: game.Description,
-        Genre: game.Genre || game["Genre Tag"],
+        Genre: formattedGenre,
         "Release Date": game["Release Date"],
         Platform: formattedPlatform,
         "Developer/Publisher": game["Developer/Publisher"],
@@ -39,4 +63,4 @@ function getGameMetadataById(id) {
   return gamesPromise.then(fulfilledHandler)
 }
 
-export { getGameMetadataById };
+export { getGameMetadataById, loadMetadataGames };
