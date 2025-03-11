@@ -86,7 +86,7 @@
           document.getElementById('game-rating').textContent = gameData.Rating || 'N/A';
           document.getElementById('game-completion-time').textContent = gameData['Average Completion Time'] || 'N/A';
 
-          // Build the cover image source based on the game ID, e.g. "1.jpg"
+          // Build the cover image source based on the game ID
           const coverImg = document.getElementById('game-cover');
           coverImg.src = './resources/images/games/' + gameId + '/banner.webp';
           coverImg.alt = `Cover image for ${gameData.Title}`;
