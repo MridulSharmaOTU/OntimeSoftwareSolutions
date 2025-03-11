@@ -1,7 +1,7 @@
 /**
  * parser.js
  *
- * This module provides functions to load and parse the metadataGames.csv file.
+ * This module provides functions to load and parse the loadMetdata.csv file.
  * The CSV parser is simple and assumes that fields do not contain commas or quotes.
  * For each record, the first row of the CSV is used as headers.
  */
