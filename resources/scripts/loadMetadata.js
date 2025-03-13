@@ -1,5 +1,5 @@
 // metadataGame.js
-import { parseCSV } from './parser.js';
+import { parseCSV } from './utils/parser.js';
 
 /**
  * Loads the metadataGames.csv file from the resources/database folder and parses it.
