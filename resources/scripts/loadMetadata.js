@@ -49,7 +49,8 @@ function getGameMetadataById(id) {
 	
 	let metadata = {
         Title: game.Title,
-        Description: game.Description,
+        DescriptionS: game.DescriptionS,
+        DescriptionL: game.DescriptionL,
         Genre: formattedGenre,
         "Release Date": game["Release Date"],
         Platform: formattedPlatform,
