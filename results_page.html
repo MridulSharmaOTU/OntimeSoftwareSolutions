@@ -75,7 +75,7 @@
       </div>
     </nav>
 
-    <!-- Search Results + Sort Dropdown -->
+    <!-- Search Results & Sort Dropdown -->
     <div class="container mt-5">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="heading-font search-results-heading mb-0">Search Results</h1>
@@ -85,21 +85,21 @@
             Sort
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <!-- Title ascending/descending -->
-            <li><a class="dropdown-item" href="?sort=t">Title ↑</a></li>
-            <li><a class="dropdown-item" href="?sort=tr">Title ↓</a></li>
-            <!-- Rating ascending/descending -->
-            <li><a class="dropdown-item" href="?sort=u">Rating ↑</a></li>
-            <li><a class="dropdown-item" href="?sort=ur">Rating ↓</a></li>
-            <!-- Release date ascending (default) / descending -->
-            <li><a class="dropdown-item" href="?">Release Date ↑</a></li>
-            <li><a class="dropdown-item" href="?sort=rr">Release Date ↓</a></li>
+            <!-- The data-sort attribute will be used to generate the correct URL including the search query -->
+            <li><a class="dropdown-item sort-option" data-sort="t" href="?sort=t">Title ↑</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="tr" href="?sort=tr">Title ↓</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="u" href="?sort=u">Rating ↑</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="ur" href="?sort=ur">Rating ↓</a></li>
+            <!-- For Release Date: Default (no sort param) is Release Date ↑ (newest first) -->
+            <li><a class="dropdown-item sort-option" data-sort="" href="?">Release Date ↑</a></li>
+            <!-- And Release Date ↓ (oldest first) -->
+            <li><a class="dropdown-item sort-option" data-sort="rr" href="?sort=rr">Release Date ↓</a></li>
           </ul>
         </div>
       </div>
       <hr class="border border-1 opacity-1">
       <div class="row" id="results-container">
-        <!-- Each search result will be rendered here as a rectangular box -->
+        <!-- Search results will be rendered here -->
       </div>
     </div>
 
@@ -109,6 +109,27 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+
+    <!-- Update dropdown links to retain search parameter -->
+    <script>
+      // On DOMContentLoaded, update sort option links to include the current search query
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const searchQuery = params.get("search") || "";
+        if (searchQuery) {
+          const sortLinks = document.querySelectorAll(".sort-option");
+          sortLinks.forEach(link => {
+            const sortValue = link.getAttribute("data-sort"); // may be empty for default
+            let newHref = "?";
+            if (sortValue) {
+              newHref += "sort=" + encodeURIComponent(sortValue) + "&";
+            }
+            newHref += "search=" + encodeURIComponent(searchQuery);
+            link.setAttribute("href", newHref);
+          });
+        }
+      });
+    </script>
 
     <!-- Custom JS to dynamically render search results -->
     <script type="module">
@@ -124,49 +145,40 @@
       function renderResults(results) {
         const container = document.getElementById("results-container");
         container.innerHTML = ""; // Clear any existing results.
-
         results.forEach(game => {
           // Create a column wrapper.
           const col = document.createElement("div");
           col.className = "col-md-4 mb-4";
-
           // Create a link wrapping the card.
           const link = document.createElement("a");
           link.href = `game_page.html?id=${game.ID}`;
-
           // Create the card element.
           const card = document.createElement("div");
           card.className = "card h-100 bg-light text-dark";
-
           // Create the cover image.
           const img = document.createElement("img");
           img.src = `./resources/images/games/${game.ID}/cover.webp`;
           img.className = "card-img-top";
           img.alt = `${game.Title} Cover`;
           card.appendChild(img);
-
           // Create the card body.
           const cardBody = document.createElement("div");
           cardBody.className = "card-body";
-
           // Add the game title.
           const title = document.createElement("h5");
           title.className = "card-title";
           title.textContent = game.Title;
           cardBody.appendChild(title);
-
           // Add the game description (short).
           const desc = document.createElement("p");
           desc.className = "card-text";
           desc.textContent = game.DescriptionS;
           cardBody.appendChild(desc);
-
           // Add the platforms information.
           const platforms = document.createElement("p");
           platforms.className = "card-text";
           platforms.innerHTML = `<small class="text-muted">Available on: ${game.Platform}</small>`;
           cardBody.appendChild(platforms);
-
           // Assemble the card.
           card.appendChild(cardBody);
           link.appendChild(card);
@@ -178,49 +190,38 @@
       // 1. Grab query params (search + sort)
       const params = new URLSearchParams(window.location.search);
       const searchQuery = params.get("search") || "";
-      // By default, if no sort param is specified, we want "Release Date ↑"
+      // Default: no sort parameter means Release Date ↑ (newest first)
       const sortParam = params.get("sort") || "";
 
-      // 2. Load all games, then filter + sort + render
+      // 2. Load all games, then filter, sort, and render results.
       loadMetadataGames()
         .then(allGames => {
-          // First: filter by search
+          // Filter by search query.
           let results = searchByTitle(allGames, searchQuery);
-
-          // Next: sort according to sortParam
+          // Sort the filtered results based on sortParam.
           switch (sortParam) {
-            case "t":
-              // Title ascending
-              sortTitle(results); // A->Z
-              break;
-            case "tr":
-              // Title descending
+            case "t": // Title ascending (A→Z)
               sortTitle(results);
-              reverse(results); // Z->A
               break;
-            case "u":
-              // Rating ascending
-              // sortRating sorts highest->lowest, so we reverse it
+            case "tr": // Title descending (Z→A)
+              sortTitle(results);
+              reverse(results);
+              break;
+            case "u": // Rating ascending (lowest→highest)
               sortRating(results);
               reverse(results);
               break;
-            case "ur":
-              // Rating descending
+            case "ur": // Rating descending (highest→lowest)
               sortRating(results);
               break;
-            case "rr":
-              // Release Date ↓ (newest first)
-              sortRelease(results); // newest->oldest
-              break;
-            default:
-              // Release Date ↑ (oldest first)
-              // sortRelease sorts newest->oldest, so we reverse it
+            case "rr": // Release Date ↓ (oldest first)
               sortRelease(results);
               reverse(results);
               break;
+            default: // Default: Release Date ↑ (newest first)
+              sortRelease(results);
+              break;
           }
-
-          // Finally: render
           renderResults(results);
         })
         .catch(error => {
