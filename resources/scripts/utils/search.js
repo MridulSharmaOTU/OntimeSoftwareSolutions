@@ -47,33 +47,25 @@ function convertToRoman(num) {
 
 /**
  * Searches for games in an array of game objects whose title matches the search query.
- * Handles case insensitivity, diacritics, and if the query is numeric,
+ * Handles case insensitivity, diacritics, and if the query contains numeric parts,
  * it also checks for the Roman numeral representation.
  * @param {Array<Object>} games - An array of game objects (already parsed).
  * @param {string} query - The search query string.
  * @returns {Array<Object>} - An array of game objects that match the search query.
  */
 function searchByTitle(games, query) {
-  const normalizedQuery = normalizeString(query.trim());
-  let romanQuery = "";
-  
-  // If the query is entirely numeric, convert it to a Roman numeral.
-  if (/^\d+$/.test(query.trim())) {
-    const num = parseInt(query.trim(), 10);
-    romanQuery = normalizeString(convertToRoman(num));
-  }
-  
-  // Define the header key that contains the game title.
+  const trimmedQuery = query.trim();
+  const normalizedQuery = normalizeString(trimmedQuery);
+  // Replace all numeric parts in the query with their Roman numeral conversion.
+  const romanQuery = normalizeString(
+    trimmedQuery.replace(/\d+/g, (match) => convertToRoman(parseInt(match, 10)))
+  );
+
   const titleKey = "Title";
-  
-  // Filter games based on the search query.
   return games.filter(game => {
     if (game[titleKey]) {
       const normalizedTitle = normalizeString(game[titleKey]);
-      // Check for direct substring match.
-      if (normalizedTitle.includes(normalizedQuery)) return true;
-      // If applicable, also check if the title contains the Roman numeral.
-      if (romanQuery && normalizedTitle.includes(romanQuery)) return true;
+      return normalizedTitle.includes(normalizedQuery) || normalizedTitle.includes(romanQuery);
     }
     return false;
   });
@@ -151,8 +143,8 @@ function runTests() {
   test("Multiple words search for 'Super Mario'", csv3, "Super Mario", ["Super Mario Bros"]);
 
   // Test 4: Numbers in search query (should match both numeric and Roman numeral formats).
-  const csv4 = "Title\nHalf-Life 2\nPortal\nDiablo II";
-  test("Numbers in search query for '2'", csv4, "2", ["Half-Life 2", "Diablo II"]);
+  const csv4 = "Title\nHalf-Life 2\nPortal\nFinal Fantasy 7: Rebirth\nFinal Fantasy VII: Advent Children";
+  test("Numbers in search query for 'Final Fantasy 7'", csv4, "Final Fantasy 7", ["Final Fantasy 7: Rebirth", "Final Fantasy VII: Advent Children"]);
 
   // Test 5: Special characters in search.
   const csv5 = "Title\nPokemon Red\nPokémon Yellow\nSuper Mario";
