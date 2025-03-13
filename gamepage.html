@@ -172,6 +172,12 @@
           <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss3.webp" alt="">
           `;
           
+          // Update the YouTube trailer embed based on the "Trailer" field from CSV
+          const trailerIframe = document.querySelector('iframe');
+          if (trailerIframe && gameData.Trailer) {
+            trailerIframe.src = gameData.Trailer;
+          }
+
           // (Optional) You can update other sections here if you want to display more metadata
           // For example, if you had placeholders for genre, release date, etc., you could update them here.
         });

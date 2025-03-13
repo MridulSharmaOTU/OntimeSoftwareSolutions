@@ -57,7 +57,8 @@ function getGameMetadataById(id) {
         "Developer/Publisher": game["Developer/Publisher"],
         Age: game.Age,
         Rating: game.Rating,
-        "Average Completion Time": game["Average Completion Time"]
+        "Average Completion Time": game["Average Completion Time"],
+        Trailer: game.Trailer,
     }
 	return metadata
   }
