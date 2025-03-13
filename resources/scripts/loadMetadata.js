@@ -1,4 +1,4 @@
-// metadataGame.js
+// loadMetadata.js
 import { parseCSV } from './utils/parser.js';
 
 /**
