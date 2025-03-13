@@ -1,1 +1,20 @@
-/* put results page styles here (remove this when you do) */
+/* results_page.css */
+
+/* Style for the Search Results heading */
+.search-results-heading {
+    color: darkgoldenrod;
+  }
+  
+  /* Example: Add some margin or padding to the results container if needed */
+  #results-container {
+    margin-top: 20px;
+  }
+  
+  /* Example: Custom card styling for search results */
+  .card {
+    transition: transform 0.2s;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+  }  
