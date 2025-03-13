@@ -4,7 +4,7 @@
  * This module provides functions for searching game metadata,
  * including helper functions to handle normalization and numeric queries.
  */
-
+ 
 /**
  * Normalizes a string by removing diacritical marks and converting to lowercase.
  * @param {string} str - The string to normalize.
