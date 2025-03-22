@@ -20,4 +20,4 @@ jobs:
           pip install pytest
 
       - name: Run integration tests
-        run: pytest tests/integration
+        run: pytest tests
