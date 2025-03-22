@@ -22,7 +22,7 @@
   </head>
   <body class="bg-dark">
     <!-- Navbar -->
-    <div id="navbar-container"></div>
+    <navbar-component></navbar-component>
 
     <!-- Search Results & Sort Dropdown -->
     <div class="container mt-5">
@@ -56,18 +56,9 @@
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-
+      crossorigin="anonymous"></script>
     <!-- Load the navbar -->
-    <script>
-      fetch('resources/scripts/navbar.html')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('navbar-container').innerHTML = html;
-        })
-        .catch(err => console.error('Failed to load navbar:', err));
-    </script>
+    <script type="module" src="./resources/scripts/navbar.js"></script>
     
     <!-- Update dropdown links to retain search parameter -->
     <script>
