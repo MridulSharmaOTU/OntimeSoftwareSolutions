@@ -3,7 +3,6 @@ import os
 import subprocess
 import pytest
 
-# Path to the CSV file where accounts are stored
 CSV_PATH = 'resources/database/accounts.csv'
 
 def run_create_account(username, password, email, admin, verified):
