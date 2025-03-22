@@ -9,7 +9,7 @@ CSV_PATH = 'resources/database/accounts.csv'
 def run_create_account(username, password, email, admin, verified):
     """
     Invokes the Node.js createAccount function via a CLI call.
-    We assume that register.js accepts command-line arguments in the form:
+    Assumes that register.js accepts command-line arguments in the form:
     node resources/scripts/accountManagement/register.js createAccount <username> <password> <email> <admin> <verified>
     """
     cmd = [
@@ -58,16 +58,10 @@ def delete_test_accounts():
     filtered = [acct for acct in accounts if acct['username'] not in ['default', 'admin']]
     write_accounts(filtered)
 
-@pytest.fixture(autouse=True)
-def cleanup_accounts():
-    """
-    Ensure that test accounts are removed before and after each test.
-    """
-    delete_test_accounts()
-    yield
+def test_create_accounts():
+    # Delete test accounts first to ensure a clean slate.
     delete_test_accounts()
 
-def test_create_and_delete_accounts():
     # Create a default account
     ret, out, err = run_create_account("default", "user", "user@localhost", 0, 0)
     assert ret == 0, f"Failed to create default account: {err}"
@@ -82,10 +76,3 @@ def test_create_and_delete_accounts():
     admin_account = next((acct for acct in accounts if acct['username'] == 'admin'), None)
     assert default_account is not None, "Default account not found in CSV"
     assert admin_account is not None, "Admin account not found in CSV"
-
-    # Now delete the test accounts
-    delete_test_accounts()
-    accounts = read_accounts()
-    usernames = [acct['username'] for acct in accounts]
-    assert 'default' not in usernames, "Default account was not deleted"
-    assert 'admin' not in usernames, "Admin account was not deleted"
