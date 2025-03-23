@@ -62,11 +62,11 @@ def test_create_accounts():
     delete_test_accounts()
 
     # Create a default account
-    ret, out, err = run_create_account("default", "user", "user@localhost", 0, 0)
+    ret, out, err = run_create_account("default", "user", "user@localhost", False, False)
     assert ret == 0, f"Failed to create default account: {err}"
 
     # Create an admin account
-    ret, out, err = run_create_account("admin", "cusadmin", "admin@localhost", 1, 0)
+    ret, out, err = run_create_account("admin", "cusadmin", "admin@localhost", True, False)
     assert ret == 0, f"Failed to create admin account: {err}"
 
     # Verify that both accounts exist in the CSV file

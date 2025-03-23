@@ -7,7 +7,7 @@ function verifyEmail(username) {
     // TODO: Implement the email verification logic.
     // For example:
     // - Look up the account by username.
-    // - Change the account's verified status.
+    // - Change the account's verified status to "True".
     // - Handle error cases. Ex. account not found, account already verified, etc.
     console.log(`Verifying email for account with username: ${username}`);
     // Placeholder: return success status.

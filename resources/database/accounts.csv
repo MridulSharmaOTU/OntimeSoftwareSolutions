@@ -1,3 +1,3 @@
 username,password,email,admin,verified
-admin,cusadmin,admin@localhost,1,1
-default,user,user@localhost,0,1
+admin,cusadmin,admin@localhost,TRUE,FALSE
+default,user,user@localhost,FALSE,FALSE
