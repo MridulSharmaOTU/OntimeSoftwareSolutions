@@ -85,18 +85,19 @@ async function saveMetadata(data) {
  */
 async function addGame(title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer) {
   // Step 1: Load the list of existing games from the CSV file.
-  games = loadGamesFromCSV()
+  //let games = loadGamesFromCSV()
+  let games = await loadMetadataGames();
 
   // Step 2: Determine a new unique ID.
   // If there are games, take the maximum current ID and add one.
   // Otherwise, start at 1.
-  if games is not empty:
-      newId = maximum(game.ID for each game in games) + 1
-  else:
-      newId = 1
+  let gameIDs = games.map((game) => {
+	return game.ID;
+  });
+  let newId = games != null && games.length != 0 ? Math.max(...gameIDs) + 1 : 1;
 
   // Step 3: Create a new game object using the provided parameters.
-  newGame = {
+  let newGame = {
       "ID": newId,
       "Title": title,
       "DescriptionS": descriptionS,
@@ -112,10 +113,15 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
   }
 
   // Step 4: Append the new game object to the list of games.
-  add newGame to games
+  //add newGame to games
+  games.push(newGame);
+
+  //console.log(games)
+  
 
   // Step 5: Save the updated list of games back to the CSV file.
-  saveGamesToCSV(games)
+  //saveGamesToCSV(games)
+  await saveMetadata(games)
 
   // Step 6: Return the newly added game.
   return newGame
@@ -139,6 +145,7 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
  * @param {string} trailer - New trailer URL.
  * @returns {Promise<Object|null>} - The updated game object, or null if the game was not found.
  */
+/*
 async function editGame(id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer) {
   // Step 1: Load the current list of games from the CSV file.
   games = loadGamesFromCSV()
@@ -187,6 +194,7 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
   // Step 7: Return the updated game object.
   return updatedGame
 }
+*/
 
 /**
  * Deletes a game from metadataGames.csv.
@@ -194,6 +202,7 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
  * @param {string} id - The ID of the game to delete.
  * @returns {Promise<boolean>} - True if deletion was successful, false otherwise.
  */
+/*
 async function deleteGame(id) {
   // Step 1: Load the current list of games from the CSV file.
   games = loadGamesFromCSV()
@@ -214,6 +223,10 @@ async function deleteGame(id) {
   // Step 5: Return true to indicate successful deletion.
   return true
 }
+*/
+
+function editGame() {}
+function deleteGame() {}
 
 export { addGame, editGame, deleteGame };
 /* ====================== Command-line Interface ====================== */

@@ -59,6 +59,7 @@ def test_edit_database():
         test_descL,
         test_trailer
     ])
+    print(out)
     assert ret == 0, f"addGame failed: {err}"
 
     # Read the CSV and locate the newly added game by its unique title.

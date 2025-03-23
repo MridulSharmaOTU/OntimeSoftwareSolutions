@@ -2,3 +2,4 @@
 .vscode/
 .$classes_uml.drawio.bkp
 pom.xml
+__pycache__
