@@ -84,32 +84,41 @@ async function saveMetadata(data) {
  * @returns {Promise<Object>} - The newly added game object.
  */
 async function addGame(title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer) {
-  const games = await loadMetadataGames();
+  // Step 1: Load the list of existing games from the CSV file.
+  games = loadGamesFromCSV()
 
-  // Generate a new unique ID by finding the maximum existing ID and adding 1.
-  let newId = 1;
-  if (games.length > 0) {
-    newId = Math.max(...games.map(game => Number(game.ID) || 0)) + 1;
+  // Step 2: Determine a new unique ID.
+  // If there are games, take the maximum current ID and add one.
+  // Otherwise, start at 1.
+  if games is not empty:
+      newId = maximum(game.ID for each game in games) + 1
+  else:
+      newId = 1
+
+  // Step 3: Create a new game object using the provided parameters.
+  newGame = {
+      "ID": newId,
+      "Title": title,
+      "DescriptionS": descriptionS,
+      "Genre Tags": genreTags,
+      "Release Date": releaseDate,
+      "Platform": platform,
+      "Developer/Publisher": developerPublisher,
+      "Age": age,
+      "Rating": rating,
+      "Average Completion Time": averageCompletionTime,
+      "DescriptionL": descriptionL,
+      "Trailer": trailer
   }
 
-  const newGame = {
-    ID: newId.toString(),
-    Title: title,
-    DescriptionS: descriptionS,
-    "Genre Tags": genreTags,
-    "Release Date": releaseDate,
-    Platform: platform,
-    "Developer/Publisher": developerPublisher,
-    Age: age,
-    Rating: rating,
-    "Average Completion Time": averageCompletionTime,
-    DescriptionL: descriptionL,
-    Trailer: trailer
-  };
+  // Step 4: Append the new game object to the list of games.
+  add newGame to games
 
-  games.push(newGame);
-  await saveMetadata(games);
-  return newGame;
+  // Step 5: Save the updated list of games back to the CSV file.
+  saveGamesToCSV(games)
+
+  // Step 6: Return the newly added game.
+  return newGame
 }
 
 /**
@@ -131,33 +140,52 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
  * @returns {Promise<Object|null>} - The updated game object, or null if the game was not found.
  */
 async function editGame(id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer) {
-  const games = await loadMetadataGames();
-  const index = games.findIndex(game => game.ID === id);
+  // Step 1: Load the current list of games from the CSV file.
+  games = loadGamesFromCSV()
 
-  if (index === -1) {
-    console.error(`Game with ID ${id} not found.`);
-    return null;
-  }
+  // Step 2: Find the index of the game with the matching ID.
+  index = find index where game.ID equals id in games
+  if index is not found:
+      // Log error and return null if the game does not exist.
+      log "Game with ID [id] not found."
+      return null
 
-  // Create a copy of the existing game data.
-  const updatedGame = { ...games[index] };
+  // Step 3: Make a copy of the existing game data.
+  updatedGame = copy of games[index]
 
-  // Update fields only if a non-empty, non-null value is provided.
-  if (title != null && title !== '') updatedGame.Title = title;
-  if (descriptionS != null && descriptionS !== '') updatedGame.DescriptionS = descriptionS;
-  if (genreTags != null && genreTags !== '') updatedGame["Genre Tags"] = genreTags;
-  if (releaseDate != null && releaseDate !== '') updatedGame["Release Date"] = releaseDate;
-  if (platform != null && platform !== '') updatedGame.Platform = platform;
-  if (developerPublisher != null && developerPublisher !== '') updatedGame["Developer/Publisher"] = developerPublisher;
-  if (age != null && age !== '') updatedGame.Age = age;
-  if (rating != null && rating !== '') updatedGame.Rating = rating;
-  if (averageCompletionTime != null && averageCompletionTime !== '') updatedGame["Average Completion Time"] = averageCompletionTime;
-  if (descriptionL != null && descriptionL !== '') updatedGame.DescriptionL = descriptionL;
-  if (trailer != null && trailer !== '') updatedGame.Trailer = trailer;
+  // Step 4: For each field, if a new value is provided (i.e., not empty or null),
+  // update the corresponding property in updatedGame.
+  if title is not empty or null:
+      updatedGame.Title = title
+  if descriptionS is not empty or null:
+      updatedGame.DescriptionS = descriptionS
+  if genreTags is not empty or null:
+      updatedGame["Genre Tags"] = genreTags
+  if releaseDate is not empty or null:
+      updatedGame["Release Date"] = releaseDate
+  if platform is not empty or null:
+      updatedGame.Platform = platform
+  if developerPublisher is not empty or null:
+      updatedGame["Developer/Publisher"] = developerPublisher
+  if age is not empty or null:
+      updatedGame.Age = age
+  if rating is not empty or null:
+      updatedGame.Rating = rating
+  if averageCompletionTime is not empty or null:
+      updatedGame["Average Completion Time"] = averageCompletionTime
+  if descriptionL is not empty or null:
+      updatedGame.DescriptionL = descriptionL
+  if trailer is not empty or null:
+      updatedGame.Trailer = trailer
 
-  games[index] = updatedGame;
-  await saveMetadata(games);
-  return games[index];
+  // Step 5: Replace the existing game with the updated version.
+  games[index] = updatedGame
+
+  // Step 6: Save the updated list of games back to the CSV file.
+  saveGamesToCSV(games)
+
+  // Step 7: Return the updated game object.
+  return updatedGame
 }
 
 /**
@@ -167,17 +195,24 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
  * @returns {Promise<boolean>} - True if deletion was successful, false otherwise.
  */
 async function deleteGame(id) {
-  const games = await loadMetadataGames();
-  const index = games.findIndex(game => game.ID === id);
+  // Step 1: Load the current list of games from the CSV file.
+  games = loadGamesFromCSV()
 
-  if (index === -1) {
-    console.error(`Game with ID ${id} not found.`);
-    return false;
-  }
+  // Step 2: Find the index of the game with the given ID.
+  index = find index where game.ID equals id in games
+  if index is not found:
+      // Log error and return false if the game is not found.
+      log "Game with ID [id] not found."
+      return false
 
-  games.splice(index, 1);
-  await saveMetadata(games);
-  return true;
+  // Step 3: Remove the game from the list.
+  remove the game at position index from games
+
+  // Step 4: Save the updated list back to the CSV file.
+  saveGamesToCSV(games)
+
+  // Step 5: Return true to indicate successful deletion.
+  return true
 }
 
 export { addGame, editGame, deleteGame };
