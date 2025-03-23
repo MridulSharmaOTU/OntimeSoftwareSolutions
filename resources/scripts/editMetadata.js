@@ -1,6 +1,11 @@
-import { loadMetadataGames } from './loadMetadata.js';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { loadMetadataGames } from './loadMetadata.js';
+
+// Define __filename and __dirname for ES modules.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Define the path to the metadataGames.csv file.
 // Adjust the path as needed based on your project structure.
@@ -95,6 +100,7 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
 
 /**
  * Edits an existing game in metadataGames.csv.
+ * If a field is empty, null, or undefined, it will be skipped.
  *
  * @param {string} id - The ID of the game to edit.
  * @param {string} title - The new title of the game.
@@ -245,8 +251,7 @@ function printUsage() {
     }
   }
   
-  // Check if the module is run directly.
-  const __filename = fileURLToPath(import.meta.url);
-  if (process.argv[1] === __filename) {
+  // Run the CLI if this module is executed directly.
+  if (process.argv[1] === fileURLToPath(import.meta.url)) {
     main();
   }
