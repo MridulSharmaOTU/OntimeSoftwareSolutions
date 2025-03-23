@@ -1,15 +1,29 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { loadMetadataGames } from './loadMetadata.js';
+import { parseCSV } from './utils/parser.js';
 
 // Define __filename and __dirname for ES modules.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Define the path to the metadataGames.csv file.
-// Adjust the path as needed based on your project structure.
-const metadataPath = path.join(__dirname, '../resources/database/metadataGames.csv');
+// Since editMetadata.js is in resources/scripts, go up one level to resources and then into database.
+const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
+
+/**
+ * Loads the metadataGames.csv file from disk and parses it.
+ *
+ * @returns {Promise<Array<Object>>} - A promise that resolves to the parsed CSV data.
+ */
+async function loadMetadataGames() {
+  try {
+    const csvText = await fs.promises.readFile(metadataPath, 'utf8');
+    return parseCSV(csvText);
+  } catch (error) {
+    console.error('Error loading metadataGames.csv:', error);
+    return [];
+  }
+}
 
 /**
  * Helper function to convert an array of game objects into a CSV string.
@@ -125,24 +139,23 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
     return null;
   }
 
-   // Create a copy of the existing game data.
-   const updatedGame = { ...games[index] };
+  // Create a copy of the existing game data.
+  const updatedGame = { ...games[index] };
 
-   // Update fields only if a non-empty, non-null value is provided.
-   if (title != null && title !== '') updatedGame.Title = title;
-   if (descriptionS != null && descriptionS !== '') updatedGame.DescriptionS = descriptionS;
-   if (genreTags != null && genreTags !== '') updatedGame["Genre Tags"] = genreTags;
-   if (releaseDate != null && releaseDate !== '') updatedGame["Release Date"] = releaseDate;
-   if (platform != null && platform !== '') updatedGame.Platform = platform;
-   if (developerPublisher != null && developerPublisher !== '') updatedGame["Developer/Publisher"] = developerPublisher;
-   if (age != null && age !== '') updatedGame.Age = age;
-   if (rating != null && rating !== '') updatedGame.Rating = rating;
-   if (averageCompletionTime != null && averageCompletionTime !== '') updatedGame["Average Completion Time"] = averageCompletionTime;
-   if (descriptionL != null && descriptionL !== '') updatedGame.DescriptionL = descriptionL;
-   if (trailer != null && trailer !== '') updatedGame.Trailer = trailer;
- 
-   games[index] = updatedGame;
+  // Update fields only if a non-empty, non-null value is provided.
+  if (title != null && title !== '') updatedGame.Title = title;
+  if (descriptionS != null && descriptionS !== '') updatedGame.DescriptionS = descriptionS;
+  if (genreTags != null && genreTags !== '') updatedGame["Genre Tags"] = genreTags;
+  if (releaseDate != null && releaseDate !== '') updatedGame["Release Date"] = releaseDate;
+  if (platform != null && platform !== '') updatedGame.Platform = platform;
+  if (developerPublisher != null && developerPublisher !== '') updatedGame["Developer/Publisher"] = developerPublisher;
+  if (age != null && age !== '') updatedGame.Age = age;
+  if (rating != null && rating !== '') updatedGame.Rating = rating;
+  if (averageCompletionTime != null && averageCompletionTime !== '') updatedGame["Average Completion Time"] = averageCompletionTime;
+  if (descriptionL != null && descriptionL !== '') updatedGame.DescriptionL = descriptionL;
+  if (trailer != null && trailer !== '') updatedGame.Trailer = trailer;
 
+  games[index] = updatedGame;
   await saveMetadata(games);
   return games[index];
 }
@@ -168,90 +181,89 @@ async function deleteGame(id) {
 }
 
 export { addGame, editGame, deleteGame };
-
 /* ====================== Command-line Interface ====================== */
 
 /**
  * Prints usage instructions.
  */
 function printUsage() {
-    console.log(`Usage:
-  
-  For adding a game:
-    node editMetadata.js addGame <title> <descriptionS> <genreTags> <releaseDate> <platform> <developerPublisher> <age> <rating> <averageCompletionTime> <descriptionL> <trailer>
-  
-  For editing a game:
-    node editMetadata.js editGame <id> <title> <descriptionS> <genreTags> <releaseDate> <platform> <developerPublisher> <age> <rating> <averageCompletionTime> <descriptionL> <trailer>
-  
-  For deleting a game:
-    node editMetadata.js deleteGame <id>
-  `);
+  console.log(`Usage:
+
+For adding a game:
+  node editMetadata.js addGame <title> <descriptionS> <genreTags> <releaseDate> <platform> <developerPublisher> <age> <rating> <averageCompletionTime> <descriptionL> <trailer>
+
+For editing a game:
+  node editMetadata.js editGame <id> <title> <descriptionS> <genreTags> <releaseDate> <platform> <developerPublisher> <age> <rating> <averageCompletionTime> <descriptionL> <trailer>
+
+For deleting a game:
+  node editMetadata.js deleteGame <id>
+`);
+}
+
+/**
+ * Main CLI function that parses process arguments and executes the corresponding function.
+ */
+async function main() {
+  const args = process.argv.slice(2);
+  if (args.length === 0) {
+    console.error("No command provided.");
+    printUsage();
+    process.exit(1);
   }
   
-  /**
-   * Main CLI function that parses process arguments and executes the corresponding function.
-   */
-  async function main() {
-    const args = process.argv.slice(2);
-    if (args.length === 0) {
-      console.error("No command provided.");
-      printUsage();
-      process.exit(1);
-    }
-    
-    const command = args[0];
-    
-    try {
-      if (command === 'addGame') {
-        if (args.length !== 12) {
-          console.error("Invalid number of arguments for addGame.");
-          printUsage();
-          process.exit(1);
-        }
-        const [title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer] = args.slice(1);
-        const newGame = await addGame(title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
-        console.log("Added game:", newGame);
-        
-      } else if (command === 'editGame') {
-        if (args.length !== 13) {
-          console.error("Invalid number of arguments for editGame.");
-          printUsage();
-          process.exit(1);
-        }
-        const [id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer] = args.slice(1);
-        const updatedGame = await editGame(id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
-        if (updatedGame) {
-          console.log("Updated game:", updatedGame);
-        } else {
-          console.error(`Game with ID ${id} not found.`);
-        }
-        
-      } else if (command === 'deleteGame') {
-        if (args.length !== 2) {
-          console.error("Invalid number of arguments for deleteGame.");
-          printUsage();
-          process.exit(1);
-        }
-        const id = args[1];
-        const result = await deleteGame(id);
-        if (result) {
-          console.log(`Game with ID ${id} deleted successfully.`);
-        } else {
-          console.error(`Game with ID ${id} not found or deletion failed.`);
-        }
-        
-      } else {
-        console.error(`Unknown command: ${command}`);
+  const command = args[0];
+  
+  try {
+    if (command === 'addGame') {
+      if (args.length !== 12) {
+        console.error("Invalid number of arguments for addGame.");
         printUsage();
         process.exit(1);
       }
-    } catch (error) {
-      console.error("Error executing command:", error);
+      const [title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer] = args.slice(1);
+      const newGame = await addGame(title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
+      console.log("Added game:", newGame);
+      
+    } else if (command === 'editGame') {
+      if (args.length !== 13) {
+        console.error("Invalid number of arguments for editGame.");
+        printUsage();
+        process.exit(1);
+      }
+      const [id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer] = args.slice(1);
+      const updatedGame = await editGame(id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
+      if (updatedGame) {
+        console.log("Updated game:", updatedGame);
+      } else {
+        console.error(`Game with ID ${id} not found.`);
+      }
+      
+    } else if (command === 'deleteGame') {
+      if (args.length !== 2) {
+        console.error("Invalid number of arguments for deleteGame.");
+        printUsage();
+        process.exit(1);
+      }
+      const id = args[1];
+      const result = await deleteGame(id);
+      if (result) {
+        console.log(`Game with ID ${id} deleted successfully.`);
+      } else {
+        console.error(`Game with ID ${id} not found or deletion failed.`);
+      }
+      
+    } else {
+      console.error(`Unknown command: ${command}`);
+      printUsage();
       process.exit(1);
     }
+  } catch (error) {
+    console.error("Error executing command:", error);
+    process.exit(1);
   }
-  
-  // Run the CLI if this module is executed directly.
-  if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    main();
-  }
+}
+
+// Run the CLI if this module is executed directly.
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main();
+}
