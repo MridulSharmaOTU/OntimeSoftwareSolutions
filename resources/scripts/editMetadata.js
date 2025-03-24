@@ -154,7 +154,7 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
   index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
   if (index < 0) {
       // Log error and return null if the game does not exist.
-      console.err(`Game with ID ${id} not found.`)
+      console.error(`Game with ID ${id} not found.`)
       return null;
   }
 
@@ -223,7 +223,7 @@ async function deleteGame(id) {
   index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
   if (index < 0) {
       // Log error and return false if the game is not found.
-      console.err(`Game with ID ${id} not found`);
+      console.error(`Game with ID ${id} not found`);
       return false;
   }
 
