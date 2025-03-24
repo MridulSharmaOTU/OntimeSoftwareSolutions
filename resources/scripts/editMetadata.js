@@ -121,7 +121,7 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
 
   // Step 5: Save the updated list of games back to the CSV file.
   //saveGamesToCSV(games)
-  await saveMetadata(games)
+  await saveMetadata(games);
 
   // Step 6: Return the newly added game.
   return newGame
@@ -145,56 +145,68 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
  * @param {string} trailer - New trailer URL.
  * @returns {Promise<Object|null>} - The updated game object, or null if the game was not found.
  */
-/*
 async function editGame(id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer) {
   // Step 1: Load the current list of games from the CSV file.
-  games = loadGamesFromCSV()
+  games = await loadMetadataGames();
 
   // Step 2: Find the index of the game with the matching ID.
-  index = find index where game.ID equals id in games
-  if index is not found:
+  //index = find index where game.ID equals id in games
+  index = games.findIndex((game) => game.ID == id);
+  if (index < 0) {
       // Log error and return null if the game does not exist.
-      log "Game with ID [id] not found."
-      return null
+      console.err(`Game with ID ${id} not found.`)
+      return null;
+  }
 
   // Step 3: Make a copy of the existing game data.
-  updatedGame = copy of games[index]
+  //updatedGame = copy of games[index]
+  updatedGame = structuredClone(games[index]);
 
   // Step 4: For each field, if a new value is provided (i.e., not empty or null),
   // update the corresponding property in updatedGame.
-  if title is not empty or null:
-      updatedGame.Title = title
-  if descriptionS is not empty or null:
-      updatedGame.DescriptionS = descriptionS
-  if genreTags is not empty or null:
-      updatedGame["Genre Tags"] = genreTags
-  if releaseDate is not empty or null:
-      updatedGame["Release Date"] = releaseDate
-  if platform is not empty or null:
-      updatedGame.Platform = platform
-  if developerPublisher is not empty or null:
-      updatedGame["Developer/Publisher"] = developerPublisher
-  if age is not empty or null:
-      updatedGame.Age = age
-  if rating is not empty or null:
-      updatedGame.Rating = rating
-  if averageCompletionTime is not empty or null:
-      updatedGame["Average Completion Time"] = averageCompletionTime
-  if descriptionL is not empty or null:
-      updatedGame.DescriptionL = descriptionL
-  if trailer is not empty or null:
-      updatedGame.Trailer = trailer
+  if (title != null && title != "") {
+      updatedGame.Title = title;
+  }
+  if (descriptionS != null && descriptionS != "") {
+      updatedGame.DescriptionS = descriptionS;
+  }
+  if (genreTags != null && genreTags != "") {
+      updatedGame["Genre Tags"] = genreTags;
+  }
+  if (releaseDate != null && releaseDate != "") {
+      updatedGame["Release Date"] = releaseDate;
+  }
+  if (platform != null && platform != "") {
+      updatedGame.Platform = platform;
+  }
+  if (developerPublisher != null && developerPublisher != "") {
+      updatedGame["Developer/Publisher"] = developerPublisher;
+  }
+  if (age != null && age != "") {
+      updatedGame.Age = age;
+  }
+  if (rating != null && rating != "") {
+      updatedGame.Rating = rating;
+  }
+  if (averageCompletionTime != null && averageCompletionTime != "") {
+      updatedGame["Average Completion Time"] = averageCompletionTime;
+  }
+  if (descriptionL != null && descriptionL != "") {
+      updatedGame.DescriptionL = descriptionL;
+  }
+  if (trailer != null && trailer != "") {
+      updatedGame.Trailer = trailer;
+  }
 
   // Step 5: Replace the existing game with the updated version.
-  games[index] = updatedGame
+  games[index] = updatedGame;
 
   // Step 6: Save the updated list of games back to the CSV file.
-  saveGamesToCSV(games)
+  await saveMetadata(games);
 
   // Step 7: Return the updated game object.
-  return updatedGame
+  return updatedGame;
 }
-*/
 
 /**
  * Deletes a game from metadataGames.csv.
@@ -225,7 +237,6 @@ async function deleteGame(id) {
 }
 */
 
-function editGame() {}
 function deleteGame() {}
 
 export { addGame, editGame, deleteGame };
