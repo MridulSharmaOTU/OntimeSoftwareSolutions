@@ -151,7 +151,7 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
 
   // Step 2: Find the index of the game with the matching ID.
   //index = find index where game.ID equals id in games
-  index = games.findIndex((game) => game.ID == id);
+  index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
   if (index < 0) {
       // Log error and return null if the game does not exist.
       console.err(`Game with ID ${id} not found.`)
@@ -164,37 +164,37 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
 
   // Step 4: For each field, if a new value is provided (i.e., not empty or null),
   // update the corresponding property in updatedGame.
-  if (title != null && title != "") {
+  if (title != null && title.length != null && title.length != 0) {
       updatedGame.Title = title;
   }
-  if (descriptionS != null && descriptionS != "") {
+  if (descriptionS != null && descriptionS.length != null && descriptionS.length != 0) {
       updatedGame.DescriptionS = descriptionS;
   }
-  if (genreTags != null && genreTags != "") {
+  if (genreTags != null && genreTags.length != null && genreTags.length != 0) {
       updatedGame["Genre Tags"] = genreTags;
   }
-  if (releaseDate != null && releaseDate != "") {
+  if (releaseDate != null && releaseDate.length != null && releaseDate.length != 0) {
       updatedGame["Release Date"] = releaseDate;
   }
-  if (platform != null && platform != "") {
+  if (platform != null && platform.length != null && platform.length != 0) {
       updatedGame.Platform = platform;
   }
-  if (developerPublisher != null && developerPublisher != "") {
+  if (developerPublisher != null && developerPublisher.length != null && developerPublisher.length != 0) {
       updatedGame["Developer/Publisher"] = developerPublisher;
   }
-  if (age != null && age != "") {
+  if (age != null && age.length != null && age.length != 0) {
       updatedGame.Age = age;
   }
-  if (rating != null && rating != "") {
+  if (rating != null && rating.length != null && rating.length != 0) {
       updatedGame.Rating = rating;
   }
-  if (averageCompletionTime != null && averageCompletionTime != "") {
+  if (averageCompletionTime != null && averageCompletionTime.length != null && averageCompletionTime.length != 0) {
       updatedGame["Average Completion Time"] = averageCompletionTime;
   }
-  if (descriptionL != null && descriptionL != "") {
+  if (descriptionL != null && descriptionL.length != null && descriptionL.length != 0) {
       updatedGame.DescriptionL = descriptionL;
   }
-  if (trailer != null && trailer != "") {
+  if (trailer != null && trailer.length != null && trailer.length != 0) {
       updatedGame.Trailer = trailer;
   }
 
@@ -214,30 +214,30 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
  * @param {string} id - The ID of the game to delete.
  * @returns {Promise<boolean>} - True if deletion was successful, false otherwise.
  */
-/*
 async function deleteGame(id) {
   // Step 1: Load the current list of games from the CSV file.
-  games = loadGamesFromCSV()
+  games = await loadMetadataGames();
 
   // Step 2: Find the index of the game with the given ID.
-  index = find index where game.ID equals id in games
-  if index is not found:
+  //index = find index where game.ID equals id in games
+  index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
+  if (index < 0) {
       // Log error and return false if the game is not found.
-      log "Game with ID [id] not found."
-      return false
+      console.err(`Game with ID ${id} not found`);
+      return false;
+  }
 
   // Step 3: Remove the game from the list.
-  remove the game at position index from games
+  //remove the game at position index from games
+  games.splice(index, 1);
+  
 
   // Step 4: Save the updated list back to the CSV file.
-  saveGamesToCSV(games)
+  await saveMetadata(games);
 
   // Step 5: Return true to indicate successful deletion.
-  return true
+  return true;
 }
-*/
-
-function deleteGame() {}
 
 export { addGame, editGame, deleteGame };
 /* ====================== Command-line Interface ====================== */
