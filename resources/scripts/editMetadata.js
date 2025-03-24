@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { parseCSV } from './utils/parser.js';
+import { loadMetadataGames } from './loadMetadata.js';
 
 // Define __filename and __dirname for ES modules.
 const __filename = fileURLToPath(import.meta.url);
@@ -9,21 +10,6 @@ const __dirname = path.dirname(__filename);
 
 // Since editMetadata.js is in resources/scripts, go up one level to resources and then into database.
 const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
-
-/**
- * Loads the metadataGames.csv file from disk and parses it.
- *
- * @returns {Promise<Array<Object>>} - A promise that resolves to the parsed CSV data.
- */
-async function loadMetadataGames() {
-  try {
-    const csvText = await fs.promises.readFile(metadataPath, 'utf8');
-    return parseCSV(csvText);
-  } catch (error) {
-    console.error('Error loading metadataGames.csv:', error);
-    return [];
-  }
-}
 
 /**
  * Helper function to convert an array of game objects into a CSV string.
@@ -86,7 +72,7 @@ async function saveMetadata(data) {
 async function addGame(title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer) {
   // Step 1: Load the list of existing games from the CSV file.
   //let games = loadGamesFromCSV()
-  let games = await loadMetadataGames();
+  const games = await loadMetadataGames();
 
   // Step 2: Determine a new unique ID.
   // If there are games, take the maximum current ID and add one.
@@ -97,7 +83,7 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
   let newId = games != null && games.length != 0 ? Math.max(...gameIDs) + 1 : 1;
 
   // Step 3: Create a new game object using the provided parameters.
-  let newGame = {
+  const newGame = {
       "ID": newId,
       "Title": title,
       "DescriptionS": descriptionS,
@@ -147,11 +133,11 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
  */
 async function editGame(id, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer) {
   // Step 1: Load the current list of games from the CSV file.
-  games = await loadMetadataGames();
+  const games = await loadMetadataGames();
 
   // Step 2: Find the index of the game with the matching ID.
   //index = find index where game.ID equals id in games
-  index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
+  const index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
   if (index < 0) {
       // Log error and return null if the game does not exist.
       console.error(`Game with ID ${id} not found.`)
@@ -160,7 +146,7 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
 
   // Step 3: Make a copy of the existing game data.
   //updatedGame = copy of games[index]
-  updatedGame = structuredClone(games[index]);
+  const updatedGame = structuredClone(games[index]);
 
   // Step 4: For each field, if a new value is provided (i.e., not empty or null),
   // update the corresponding property in updatedGame.
@@ -216,11 +202,11 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
  */
 async function deleteGame(id) {
   // Step 1: Load the current list of games from the CSV file.
-  games = await loadMetadataGames();
+  const games = await loadMetadataGames();
 
   // Step 2: Find the index of the game with the given ID.
   //index = find index where game.ID equals id in games
-  index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
+  const index = games.findIndex((game) => game.ID.localeCompare(id) == 0);
   if (index < 0) {
       // Log error and return false if the game is not found.
       console.error(`Game with ID ${id} not found`);
