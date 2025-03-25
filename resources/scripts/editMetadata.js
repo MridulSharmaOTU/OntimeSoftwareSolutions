@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { parseCSV } from './utils/parser.js';
+import { loadMetadataGames } from './loadMetadata.js';
 
 // Define __filename and __dirname for ES modules.
 const __filename = fileURLToPath(import.meta.url);
@@ -9,21 +9,6 @@ const __dirname = path.dirname(__filename);
 
 // Since editMetadata.js is in resources/scripts, go up one level to resources and then into database.
 const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
-
-/**
- * Loads the metadataGames.csv file from disk and parses it.
- *
- * @returns {Promise<Array<Object>>} - A promise that resolves to the parsed CSV data.
- */
-async function loadMetadataGames() {
-  try {
-    const csvText = await fs.promises.readFile(metadataPath, 'utf8');
-    return parseCSV(csvText);
-  } catch (error) {
-    console.error('Error loading metadataGames.csv:', error);
-    return [];
-  }
-}
 
 /**
  * Helper function to convert an array of game objects into a CSV string.
