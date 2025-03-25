@@ -93,7 +93,7 @@ async function addGame(title, descriptionS, genreTags, releaseDate, platform, de
   }
 
   const newGame = {
-    ID: newId,
+    ID: newId.toString(),
     Title: title,
     DescriptionS: descriptionS,
     "Genre Tags": genreTags,
