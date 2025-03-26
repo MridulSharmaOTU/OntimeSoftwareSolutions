@@ -1,23 +1,51 @@
 import { parseCSV } from './utils/parser.js';
 
 /**
- * Loads the metadataGames.csv file from the resources/database folder and parses it.
+ * Environment-Aware CSV Loader:
+ * 
+ * This function loads and parses the 'metadataGames.csv' file in an environment-aware manner.
+ * 
+ * - In a Node environment (e.g. during pytest testing), it dynamically imports the Node.js 'fs', 'path', 
+ *   and 'url' modules to read the CSV file directly from disk using an absolute path. This ensures that 
+ *   any updates made by backend operations (such as editing a game) are properly reflected in subsequent reads.
+ * 
+ * - In a browser environment, it uses the fetch API to load the CSV file. This method is compatible with 
+ *   front-end usage where Node.js modules are not available.
+ *
  * @returns {Promise<Array<Object>>} - A promise that resolves to the parsed CSV data.
  */
-function loadMetadataGames() {
-  // Adjust the path as necessary to match your folder structure
-  return fetch('resources/database/metadataGames.csv')
-    .then(response => {
+async function loadMetadataGames() {
+  // Check for Node.js environment.
+  if (typeof process !== 'undefined' && process.versions != null && process.versions.node != null) {
+    // Node environment: use dynamic imports for Node modules.
+    const fs = await import('fs');
+    const path = await import('path');
+    const { fileURLToPath } = await import('url');
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    // Adjust the relative path as necessary to point to your CSV file.
+    const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
+    try {
+      const csvText = await fs.promises.readFile(metadataPath, 'utf8');
+      return parseCSV(csvText);
+    } catch (error) {
+      console.error('Error reading metadataGames.csv in Node:', error);
+      return [];
+    }
+  } else {
+    // Browser environment: use fetch.
+    try {
+      const response = await fetch('resources/database/metadataGames.csv');
       if (!response.ok) {
         throw new Error('Network response was not ok: ' + response.statusText);
       }
-      return response.text();
-    })
-    .then(csvText => parseCSV(csvText))
-    .catch(error => {
+      const csvText = await response.text();
+      return parseCSV(csvText);
+    } catch (error) {
       console.error('Error fetching or parsing metadataGames.csv:', error);
       return [];
-    });
+    }
+  }
 }
 
 /**
