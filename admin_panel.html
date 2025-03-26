@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Game Page - Admin Panel</title>
+  <!-- Link to your CSS file (adjust path if needed) -->
+  <link rel="stylesheet" href="resources/styles/admin_panel.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 id="pageTitle">Game Page - Add Game</h1>
+    
+    <form id="gameForm" class="game-form">
+      <!-- Title -->
+      <div class="form-row">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" placeholder="Title" />
+      </div>
+      
+      <!-- Short Description -->
+      <div class="form-row">
+        <label for="descriptionS">Description (Short):</label>
+        <textarea id="descriptionS" name="descriptionS" placeholder="Short description"></textarea>
+      </div>
+      
+      <!-- Long Description -->
+      <div class="form-row">
+        <label for="descriptionL">Description (Long):</label>
+        <textarea id="descriptionL" name="descriptionL" placeholder="Long description"></textarea>
+      </div>
+      
+      <!-- Genre Checkboxes -->
+      <div class="form-row">
+        <span>Genre:</span>
+        <label><input type="checkbox" name="genre" value="Action" /> Action</label>
+        <label><input type="checkbox" name="genre" value="Adventure" /> Adventure</label>
+        <label><input type="checkbox" name="genre" value="RPG" /> RPG</label>
+        <label><input type="checkbox" name="genre" value="Shooter" /> Shooter</label>
+        <label><input type="checkbox" name="genre" value="Horror" /> Horror</label>
+        <label><input type="checkbox" name="genre" value="Racing" /> Racing</label>
+      </div>
+      
+      <!-- Console Checkboxes -->
+      <div class="form-row">
+        <span>Console:</span>
+        <label><input type="checkbox" name="console" value="Xbox" /> Xbox</label>
+        <label><input type="checkbox" name="console" value="PlayStation" /> PlayStation</label>
+        <label><input type="checkbox" name="console" value="Nintendo" /> Nintendo</label>
+        <label><input type="checkbox" name="console" value="PC" /> PC</label>
+      </div>
+      
+      <!-- Publisher/Developer -->
+      <div class="form-row">
+        <label for="devPub">Publisher/Developer:</label>
+        <input type="text" id="devPub" name="devPub" placeholder="Publisher/Developer" />
+      </div>
+      
+      <!-- Age Rating -->
+      <div class="form-row">
+        <label for="ageRating">Age Rating:</label>
+        <input type="text" id="ageRating" name="ageRating" placeholder="Age Rating" />
+      </div>
+      
+      <!-- Rating -->
+      <div class="form-row">
+        <label for="rating">Rating:</label>
+        <input type="text" id="rating" name="rating" placeholder="Rating" />
+      </div>
+      
+      <!-- Completion Time -->
+      <div class="form-row">
+        <label for="completionTime">Completion Time:</label>
+        <input type="text" id="completionTime" name="completionTime" placeholder="Hours" />
+      </div>
+      
+      <!-- Release Date (with calendar) -->
+      <div class="form-row">
+        <label for="releaseDate">Release Date:</label>
+        <input type="date" id="releaseDate" name="releaseDate" />
+      </div>
+      
+      <!-- Trailer -->
+      <div class="form-row">
+        <label for="trailer">Trailer:</label>
+        <input type="text" id="trailer" name="trailer" placeholder="Trailer URL" />
+      </div>
+      
+      <!-- Cover -->
+      <div class="form-row">
+        <label for="cover">Cover:</label>
+        <input type="file" id="cover" name="cover" />
+      </div>
+      
+      <!-- Banner -->
+      <div class="form-row">
+        <label for="banner">Banner:</label>
+        <input type="file" id="banner" name="banner" />
+      </div>
+      
+      <!-- Screenshot 1 -->
+      <div class="form-row">
+        <label for="screenshot1">Screenshot 1:</label>
+        <input type="file" id="screenshot1" name="screenshot1" />
+      </div>
+      
+      <!-- Screenshot 2 -->
+      <div class="form-row">
+        <label for="screenshot2">Screenshot 2:</label>
+        <input type="file" id="screenshot2" name="screenshot2" />
+      </div>
+      
+      <!-- Screenshot 3 -->
+      <div class="form-row">
+        <label for="screenshot3">Screenshot 3:</label>
+        <input type="file" id="screenshot3" name="screenshot3" />
+      </div>
+      
+      <!-- Buttons -->
+      <div class="form-row button-row">
+        <button type="submit" id="updateButton">Add Game</button>
+        <button type="button" id="deleteButton" class="delete-button">Delete</button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Front-end script for admin panel functionality -->
+  <script type="module">
+    import { getGameMetadataById } from './resources/scripts/loadMetadata.js';
+
+    // Get query parameters to determine if we're editing an existing game.
+    const params = new URLSearchParams(window.location.search);
+    const editID = params.get('editID');
+    const pageTitle = document.getElementById('pageTitle');
+    const updateButton = document.getElementById('updateButton');
+    const deleteButton = document.getElementById('deleteButton');
+
+    if (editID) {
+      // Edit mode: show delete button and update form to reflect current metadata.
+      pageTitle.textContent = "Game Page - (Loading...)";
+      deleteButton.style.display = "inline-block";
+      updateButton.textContent = "Update";
+
+      // Load the game metadata using the provided loadMetadata.js function.
+      getGameMetadataById(editID).then(metadata => {
+        if (metadata) {
+          // Update the page title with the game's title.
+          pageTitle.textContent = "Game Page - " + metadata.Title;
+
+          // Set placeholders for text inputs and textareas.
+          document.getElementById('title').placeholder = metadata.Title;
+          document.getElementById('descriptionS').placeholder = metadata.DescriptionS;
+          document.getElementById('descriptionL').placeholder = metadata.DescriptionL;
+          document.getElementById('devPub').placeholder = metadata["Developer/Publisher"];
+          document.getElementById('ageRating').placeholder = metadata.Age;
+          document.getElementById('rating').placeholder = metadata.Rating;
+          document.getElementById('completionTime').placeholder = metadata["Average Completion Time"];
+          document.getElementById('trailer').placeholder = metadata.Trailer;
+
+          // Set the release date input value.
+          document.getElementById('releaseDate').value = metadata["Release Date"];
+
+          // Pre-check Genre checkboxes if the genre is present.
+          if (metadata.Genre) {
+            const genres = metadata.Genre.split(',').map(g => g.trim());
+            document.querySelectorAll('input[name="genre"]').forEach(checkbox => {
+              if (genres.includes(checkbox.value)) {
+                checkbox.checked = true;
+              }
+            });
+          }
+
+          // Pre-check Console checkboxes if the platform is present.
+          if (metadata.Platform) {
+            const consoles = metadata.Platform.split(',').map(c => c.trim());
+            document.querySelectorAll('input[name="console"]').forEach(checkbox => {
+              if (consoles.includes(checkbox.value)) {
+                checkbox.checked = true;
+              }
+            });
+          }
+        } else {
+          pageTitle.textContent = "Game Page - Game not found";
+        }
+      });
+    } else {
+      // Add mode: hide delete button and set submit button text accordingly.
+      pageTitle.textContent = "Game Page - Add Game";
+      deleteButton.style.display = "none";
+      updateButton.textContent = "Add Game";
+    }
+  </script>
+</body>
+</html>
