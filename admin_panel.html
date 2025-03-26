@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Game Page - Admin Panel</title>
-  <!-- Link to your CSS file (adjust path if needed) -->
+  <!-- Link to your CSS file -->
   <link rel="stylesheet" href="resources/styles/admin_panel.css" />
 </head>
 <body>
@@ -123,30 +123,36 @@
     </form>
   </div>
   
-  <!-- Front-end script for admin panel functionality -->
   <script type="module">
     import { getGameMetadataById } from './resources/scripts/loadMetadata.js';
-
-    // Get query parameters to determine if we're editing an existing game.
+    import { addGame, editGame, deleteGame } from './resources/scripts/editMetadata.js';
+    
     const params = new URLSearchParams(window.location.search);
     const editID = params.get('editID');
     const pageTitle = document.getElementById('pageTitle');
     const updateButton = document.getElementById('updateButton');
     const deleteButton = document.getElementById('deleteButton');
-
+    const gameForm = document.getElementById('gameForm');
+  
+    // Helper: returns the trimmed value or null if empty.
+    const valueOrNull = (id) => {
+      const elem = document.getElementById(id);
+      if (!elem) return null;
+      const val = elem.value;
+      return val.trim() === "" ? null : val.trim();
+    };
+  
     if (editID) {
-      // Edit mode: show delete button and update form to reflect current metadata.
+      // Edit mode: show delete button, change button text, and load current metadata.
       pageTitle.textContent = "Game Page - (Loading...)";
       deleteButton.style.display = "inline-block";
       updateButton.textContent = "Update";
-
-      // Load the game metadata using the provided loadMetadata.js function.
+  
+      // Load metadata for this game.
       getGameMetadataById(editID).then(metadata => {
         if (metadata) {
-          // Update the page title with the game's title.
           pageTitle.textContent = "Game Page - " + metadata.Title;
-
-          // Set placeholders for text inputs and textareas.
+          // Update placeholders with current metadata.
           document.getElementById('title').placeholder = metadata.Title;
           document.getElementById('descriptionS').placeholder = metadata.DescriptionS;
           document.getElementById('descriptionL').placeholder = metadata.DescriptionL;
@@ -155,11 +161,9 @@
           document.getElementById('rating').placeholder = metadata.Rating;
           document.getElementById('completionTime').placeholder = metadata["Average Completion Time"];
           document.getElementById('trailer').placeholder = metadata.Trailer;
-
-          // Set the release date input value.
           document.getElementById('releaseDate').value = metadata["Release Date"];
-
-          // Pre-check Genre checkboxes if the genre is present.
+  
+          // Pre-check genre checkboxes.
           if (metadata.Genre) {
             const genres = metadata.Genre.split(',').map(g => g.trim());
             document.querySelectorAll('input[name="genre"]').forEach(checkbox => {
@@ -168,8 +172,7 @@
               }
             });
           }
-
-          // Pre-check Console checkboxes if the platform is present.
+          // Pre-check console checkboxes.
           if (metadata.Platform) {
             const consoles = metadata.Platform.split(',').map(c => c.trim());
             document.querySelectorAll('input[name="console"]').forEach(checkbox => {
@@ -182,12 +185,93 @@
           pageTitle.textContent = "Game Page - Game not found";
         }
       });
+  
+      // Attach event listener for form submission in edit mode.
+      gameForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // Gather values, treating empty inputs as null.
+        const title = valueOrNull('title');
+        const descriptionS = valueOrNull('descriptionS');
+        const descriptionL = valueOrNull('descriptionL');
+        // Gather genres from checked checkboxes.
+        const genreElems = document.querySelectorAll('input[name="genre"]:checked');
+        let genreTags = Array.from(genreElems).map(el => el.value);
+        genreTags = genreTags.length ? genreTags.join('|') : null;
+        // Gather consoles from checked checkboxes.
+        const consoleElems = document.querySelectorAll('input[name="console"]:checked');
+        let platform = Array.from(consoleElems).map(el => el.value);
+        platform = platform.length ? platform.join('|') : null;
+        const developerPublisher = valueOrNull('devPub');
+        const age = valueOrNull('ageRating');
+        const rating = valueOrNull('rating');
+        const averageCompletionTime = valueOrNull('completionTime');
+        const releaseDate = document.getElementById('releaseDate').value.trim() === "" ? null : document.getElementById('releaseDate').value;
+        const trailer = valueOrNull('trailer');
+  
+        try {
+          const updatedGame = await editGame(editID, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
+          alert("Game updated successfully!");
+        } catch (error) {
+          console.error("Error updating game:", error);
+          alert("Failed to update game. Check console for details.");
+        }
+      });
+  
+      // Attach event listener for the delete button.
+      deleteButton.addEventListener('click', async () => {
+        const confirmMessage = "⚠️ WARNING: Deleting this game will remove it from the database. This action cannot be undone. Are you sure you want to delete this game?";
+        if (confirm(confirmMessage)) {
+          try {
+            const result = await deleteGame(editID);
+            if (result) {
+              alert("Game deleted successfully!");
+              // Redirect to add mode.
+              window.location.href = "admin_panel.html";
+            } else {
+              alert("Deletion failed!");
+            }
+          } catch (error) {
+            console.error("Error deleting game:", error);
+            alert("An error occurred while deleting the game. Check the console for details.");
+          }
+        } else {
+          alert("Deletion aborted!");
+        }
+      });
     } else {
-      // Add mode: hide delete button and set submit button text accordingly.
+      // Add mode: hide delete button and set submit button text.
       pageTitle.textContent = "Game Page - Add Game";
       deleteButton.style.display = "none";
       updateButton.textContent = "Add Game";
+      
+      gameForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = valueOrNull('title');
+        const descriptionS = valueOrNull('descriptionS');
+        const descriptionL = valueOrNull('descriptionL');
+        const genreElems = document.querySelectorAll('input[name="genre"]:checked');
+        let genreTags = Array.from(genreElems).map(el => el.value);
+        genreTags = genreTags.length ? genreTags.join('|') : null;
+        const consoleElems = document.querySelectorAll('input[name="console"]:checked');
+        let platform = Array.from(consoleElems).map(el => el.value);
+        platform = platform.length ? platform.join('|') : null;
+        const developerPublisher = valueOrNull('devPub');
+        const age = valueOrNull('ageRating');
+        const rating = valueOrNull('rating');
+        const averageCompletionTime = valueOrNull('completionTime');
+        const releaseDate = document.getElementById('releaseDate').value.trim() === "" ? null : document.getElementById('releaseDate').value;
+        const trailer = valueOrNull('trailer');
+        
+        try {
+          const newGame = await addGame(title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
+          alert("Game added successfully! ID: " + newGame.ID);
+          gameForm.reset();
+        } catch (error) {
+          console.error("Error adding game:", error);
+          alert("Failed to add game. Check console for details.");
+        }
+      });
     }
-  </script>
+  </script>  
 </body>
 </html>

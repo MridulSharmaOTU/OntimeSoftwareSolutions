@@ -1,14 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { loadMetadataGames } from './loadMetadata.js';
-
-// Define __filename and __dirname for ES modules.
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Since editMetadata.js is in resources/scripts, go up one level to resources and then into database.
-const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
 
 /**
  * Helper function to convert an array of game objects into a CSV string.
@@ -40,15 +30,33 @@ function convertToCSV(data) {
 /**
  * Saves an array of game objects back to the CSV file.
  *
+ * In a Node.js environment, this function dynamically imports fs, path, and url modules,
+ * defines __filename and __dirname, computes the correct metadata file path, and writes the CSV.
+ * In a browser environment, it logs a warning since direct file access isn't possible.
+ *
  * @param {Array<Object>} data - The game objects to be saved.
  * @returns {Promise<void>}
  */
 async function saveMetadata(data) {
-  try {
-    const csvText = convertToCSV(data);
-    await fs.promises.writeFile(metadataPath, csvText, 'utf8');
-  } catch (error) {
-    console.error('Error saving metadata:', error);
+  if (typeof process !== 'undefined' && process.versions != null && process.versions.node != null) {
+    // Node environment: dynamically import Node modules.
+    const fs = await import('fs');
+    const path = await import('path');
+    const { fileURLToPath } = await import('url');
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    // Since this file is in resources/scripts, go up one level and then into database.
+    const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
+    try {
+      const csvText = convertToCSV(data);
+      await fs.promises.writeFile(metadataPath, csvText, 'utf8');
+    } catch (error) {
+      console.error('Error saving metadata:', error);
+    }
+  } else {
+    // Browser environment: file saving isn't supported.
+    console.warn("saveMetadata: Running in browser environment. Skipping file save.");
+    return;
   }
 }
 
@@ -166,6 +174,7 @@ async function deleteGame(id) {
 }
 
 export { addGame, editGame, deleteGame };
+
 /* ====================== Command-line Interface ====================== */
 
 /**
@@ -248,7 +257,11 @@ async function main() {
   }
 }
 
-// Run the CLI if this module is executed directly.
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  main();
-}
+// Run the CLI if in a Node environment and if this module is executed directly.
+(async () => {
+  if (typeof process !== 'undefined' &&
+      process.argv &&
+      process.argv[1] === (await import('url')).fileURLToPath(import.meta.url)) {
+    main();
+  }
+})();
