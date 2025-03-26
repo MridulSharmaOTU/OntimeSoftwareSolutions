@@ -154,6 +154,69 @@ async function editGame(id, title, descriptionS, genreTags, releaseDate, platfor
 }
 
 /**
+ * Converts provided image inputs to .webp format and saves them into the 
+ * `resources/images/games/{id}` folder. Existing files in that folder are overwritten.
+ * 
+ * @param {number|string} id - The game ID.
+ * @param {*} banner - The banner image (Buffer or file path).
+ * @param {*} cover - The cover image (Buffer or file path).
+ * @param {*} ss1 - The first screenshot (Buffer or file path).
+ * @param {*} ss2 - The second screenshot (Buffer or file path).
+ * @param {*} ss3 - The third screenshot (Buffer or file path).
+ * @returns {Promise<boolean>} - Returns true if the images are processed and saved successfully; otherwise false.
+ */
+async function editImages(id, banner, cover, ss1, ss2, ss3) {
+  // Ensure we're running in a Node.js environment.
+  if (typeof process === 'undefined' || !process.versions || !process.versions.node) {
+    console.error("editImages: This function must be run in a Node environment.");
+    return false;
+  }
+  
+  try {
+    // Dynamically import Node modules.
+    const fs = await import('fs');
+    const path = await import('path');
+    const { fileURLToPath } = await import('url');
+    // Import sharp for image conversion.
+    const sharp = (await import('sharp')).default;
+    
+    // Determine __filename and __dirname for the current module.
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    
+    // Define the target directory for images: 
+    // Since this file is in resources/scripts, the images folder is at ../images/games/{id}.
+    const targetDir = path.join(__dirname, '../images/games', String(id));
+    
+    // Create the target directory (and parent directories) if it doesn't exist.
+    await fs.promises.mkdir(targetDir, { recursive: true });
+    
+    // Prepare an array mapping each image input to its target file name.
+    const imageMappings = [
+      { image: banner, filename: 'banner.webp' },
+      { image: cover, filename: 'cover.webp' },
+      { image: ss1, filename: 'ss1.webp' },
+      { image: ss2, filename: 'ss2.webp' },
+      { image: ss3, filename: 'ss3.webp' },
+    ];
+    
+    // Process each image: if provided, convert to WebP and save it.
+    for (const mapping of imageMappings) {
+      if (mapping.image) {
+        const outPath = path.join(targetDir, mapping.filename);
+        await sharp(mapping.image)
+          .webp()
+          .toFile(outPath);
+      }
+    }
+    return true;
+  } catch (error) {
+    console.error("Error in editImages:", error);
+    return false;
+  }
+}
+
+/**
  * Deletes a game from metadataGames.csv.
  *
  * @param {string} id - The ID of the game to delete.
@@ -170,10 +233,33 @@ async function deleteGame(id) {
 
   games.splice(index, 1);
   await saveMetadata(games);
+
+  // Also delete the images folder for this game.
+  if (typeof process !== 'undefined' && process.versions != null && process.versions.node != null) {
+    try {
+      // Dynamically import Node modules.
+      const fs = await import('fs');
+      const path = await import('path');
+      const { fileURLToPath } = await import('url');
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      // The images folder is at: resources/images/games/{id}
+      const folderPath = path.join(__dirname, '../images/games', String(id));
+      // Remove the folder recursively. Use fs.promises.rm if available, otherwise rmdir.
+      if (fs.promises.rm) {
+        await fs.promises.rm(folderPath, { recursive: true, force: true });
+      } else {
+        await fs.promises.rmdir(folderPath, { recursive: true });
+      }
+    } catch (error) {
+      console.error("Error deleting game images folder:", error);
+      // Continue even if the folder deletion fails.
+    }
+  }
   return true;
 }
 
-export { addGame, editGame, deleteGame };
+export { addGame, editGame, editImages, deleteGame };
 
 /* ====================== Command-line Interface ====================== */
 
