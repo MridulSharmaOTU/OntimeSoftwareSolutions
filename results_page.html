@@ -62,22 +62,25 @@
     
     <!-- Update dropdown links to retain search parameter -->
     <script>
-      // On DOMContentLoaded, update sort option links to include the current search query
+      // On DOMContentLoaded, update sort option links to include current search, console, and genre parameters
       document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const searchQuery = params.get("search") || "";
-        if (searchQuery) {
-          const sortLinks = document.querySelectorAll(".sort-option");
-          sortLinks.forEach(link => {
-            const sortValue = link.getAttribute("data-sort"); // may be empty for default
-            let newHref = "?";
-            if (sortValue) {
-              newHref += "sort=" + encodeURIComponent(sortValue) + "&";
-            }
-            newHref += "search=" + encodeURIComponent(searchQuery);
-            link.setAttribute("href", newHref);
-          });
-        }
+        const consoleParam = params.get("console") || "";
+        const genreParam = params.get("genre") || "";
+
+        const sortLinks = document.querySelectorAll(".sort-option");
+        sortLinks.forEach(link => {
+          const sortValue = link.getAttribute("data-sort"); // may be empty for default
+          const newParams = new URLSearchParams();
+
+          if (sortValue) newParams.set("sort", sortValue);
+          if (searchQuery) newParams.set("search", searchQuery);
+          if (consoleParam) newParams.set("console", consoleParam);
+          if (genreParam) newParams.set("genre", genreParam);
+
+          link.setAttribute("href", "?" + newParams.toString());
+        });
       });
     </script>
 
@@ -140,14 +143,34 @@
       // 1. Grab query params (search + sort)
       const params = new URLSearchParams(window.location.search);
       const searchQuery = params.get("search") || "";
-      // Default: no sort parameter means Release Date ↑ (newest first)
-      const sortParam = params.get("sort") || "";
-
+      const sortParam = params.get("sort") || ""; // Default: no sort parameter means Release Date ↑ (newest first)
+      const consoleParam = params.get("console") || "";
+      const genreParam = params.get("genre") || "";
+      
       // 2. Load all games, then filter, sort, and render results.
       loadMetadataGames()
         .then(allGames => {
           // Filter by search query.
           let results = searchByTitle(allGames, searchQuery);
+
+          // Filter by console if provided.
+          if (consoleParam) {
+            const consoleLower = consoleParam.toLowerCase();
+            results = results.filter(game => {
+              const platforms = game.Platform.toLowerCase().split('|').map(p => p.trim());
+              return platforms.includes(consoleLower);
+            });
+          }
+
+          // Filter by genre if provided.
+          if (genreParam) {
+            const genreLower = genreParam.toLowerCase();
+            results = results.filter(game => {
+              const genres = game["Genre Tags"].toLowerCase().split('|').map(g => g.trim());
+              return genres.includes(genreLower);
+            });
+          }
+
           // Sort the filtered results based on sortParam.
           switch (sortParam) {
             case "t": // Title ascending (A→Z)
@@ -172,6 +195,7 @@
               sortRelease(results);
               break;
           }
+
           renderResults(results);
         })
         .catch(error => {
