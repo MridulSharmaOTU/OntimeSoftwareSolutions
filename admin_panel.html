@@ -119,37 +119,83 @@
       <div class="form-row button-row">
         <button type="submit" id="updateButton">Add Game</button>
         <button type="button" id="deleteButton" class="delete-button">Delete</button>
+        <!-- New button for image uploads (visible in edit mode) -->
+        <button type="button" id="uploadImages" class="upload-button" style="display:none;">Upload Images</button>
       </div>
     </form>
   </div>
-  
   <script>
-    // API base points to the server running on port 3000.
-    const API_BASE = "http://localhost:3000/data";
-    
-    // Helper function to return trimmed value or null if empty.
-    const valueOrNull = (id) => {
+    // API endpoints for CSV data and image uploads.
+    const METADATA_API = "http://localhost:3000/data";
+    const IMAGES_API = "http://localhost:3000/images";
+  
+    // Helper: returns trimmed value or null if empty.
+    const valueOrNull = id => {
       const elem = document.getElementById(id);
       if (!elem) return null;
       const val = elem.value;
       return val.trim() === "" ? null : val.trim();
     };
-    
+  
+    // Helper: checks if any image file inputs have a file selected.
+    const hasImageFiles = () => {
+      return document.getElementById("banner").files.length ||
+             document.getElementById("cover").files.length ||
+             document.getElementById("screenshot1").files.length ||
+             document.getElementById("screenshot2").files.length ||
+             document.getElementById("screenshot3").files.length;
+    };
+  
+    // Function to upload images if present.
+    async function uploadImages(gameID) {
+      if (!hasImageFiles()) return; // Nothing to upload.
+      const formData = new FormData();
+      formData.append("id", gameID);
+  
+      const bannerFile = document.getElementById("banner").files[0];
+      const coverFile = document.getElementById("cover").files[0];
+      const ss1File = document.getElementById("screenshot1").files[0];
+      const ss2File = document.getElementById("screenshot2").files[0];
+      const ss3File = document.getElementById("screenshot3").files[0];
+  
+      if (bannerFile) formData.append("banner", bannerFile);
+      if (coverFile) formData.append("cover", coverFile);
+      if (ss1File) formData.append("ss1", ss1File);
+      if (ss2File) formData.append("ss2", ss2File);
+      if (ss3File) formData.append("ss3", ss3File);
+  
+      try {
+        const response = await fetch(IMAGES_API, {
+          method: "POST",
+          body: formData
+        });
+        if (!response.ok) {
+          console.error("Image upload failed:", await response.text());
+          alert("Game saved, but image upload failed.");
+        } else {
+          alert("Images uploaded successfully!");
+        }
+      } catch (error) {
+        console.error("Error uploading images:", error);
+        alert("Game saved, but an error occurred during image upload.");
+      }
+    }
+  
     const params = new URLSearchParams(window.location.search);
     const editID = params.get("editID");
     const pageTitle = document.getElementById("pageTitle");
     const updateButton = document.getElementById("updateButton");
     const deleteButton = document.getElementById("deleteButton");
     const gameForm = document.getElementById("gameForm");
-    
+  
     if (editID) {
-      // Edit mode: Show delete button and change update button text.
+      // Edit mode: show delete button; merge image upload with update.
       pageTitle.textContent = "Game Page - (Loading...)";
       deleteButton.style.display = "inline-block";
       updateButton.textContent = "Update";
-      
+    
       // Fetch current game data.
-      fetch(API_BASE)
+      fetch(METADATA_API)
         .then(response => response.json())
         .then(games => {
           const game = games.find(g => g.ID == editID);
@@ -164,7 +210,7 @@
             document.getElementById("completionTime").placeholder = game["Average Completion Time"];
             document.getElementById("trailer").placeholder = game.Trailer;
             document.getElementById("releaseDate").value = game["Release Date"];
-            
+    
             if (game["Genre Tags"]) {
               const genres = game["Genre Tags"].split("|").map(g => g.trim());
               document.querySelectorAll('input[name="genre"]').forEach(checkbox => {
@@ -173,7 +219,7 @@
                 }
               });
             }
-            
+    
             if (game.Platform) {
               const consoles = game.Platform.split("|").map(c => c.trim());
               document.querySelectorAll('input[name="console"]').forEach(checkbox => {
@@ -190,9 +236,9 @@
           console.error("Error fetching game data:", err);
           pageTitle.textContent = "Game Page - Error loading game data";
         });
-      
-      // Listen for form submission in edit mode.
-      gameForm.addEventListener("submit", async (e) => {
+    
+      // On form submission in edit mode: update CSV data, then upload images if present.
+      gameForm.addEventListener("submit", async e => {
         e.preventDefault();
         const payload = {
           ID: editID,
@@ -208,15 +254,16 @@
           "Average Completion Time": valueOrNull("completionTime"),
           Trailer: valueOrNull("trailer")
         };
-        
+    
         try {
-          // Use PUT if your server supports it for updates.
-          const response = await fetch(API_BASE, {
+          const response = await fetch(METADATA_API, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
           if (response.ok) {
+            // CSV updated successfully—now check for images.
+            await uploadImages(editID);
             alert("Game updated successfully!");
           } else {
             alert("Failed to update game.");
@@ -226,19 +273,19 @@
           alert("Error updating game. Check console for details.");
         }
       });
-      
-      // Listen for delete button click.
+    
+      // Delete button in edit mode remains unchanged.
       deleteButton.addEventListener("click", async () => {
-        const confirmMessage = "⚠️ WARNING: Deleting this game is like losing your secret 1-Up in a boss fight! Do you really want to press 'Reset'?";
+        const confirmMessage = "⚠️ WARNING: Deleting this game will remove it from the database. Are you sure you want to proceed?";
         if (confirm(confirmMessage)) {
           try {
-            const response = await fetch(API_BASE, {
+            const response = await fetch(METADATA_API, {
               method: "DELETE",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ id: editID })
             });
             if (response.ok) {
-              alert("Game deleted successfully! Game Over.");
+              alert("Game deleted successfully!");
               window.location.href = "admin_panel.html";
             } else {
               alert("Failed to delete game.");
@@ -248,16 +295,17 @@
             alert("Error deleting game. Check console for details.");
           }
         } else {
-          alert("Deletion cancelled! Your extra life is safe!");
+          alert("Deletion aborted.");
         }
       });
+    
     } else {
-      // Add mode: hide delete button and change update button text.
+      // Add mode: hide delete button.
       pageTitle.textContent = "Game Page - Add Game";
       deleteButton.style.display = "none";
-      updateButton.textContent = "Add Game";
-      
-      gameForm.addEventListener("submit", async (e) => {
+    
+      // In add mode, on form submission, post CSV data then check for images.
+      gameForm.addEventListener("submit", async e => {
         e.preventDefault();
         const payload = {
           Title: valueOrNull("title"),
@@ -274,12 +322,16 @@
         };
         
         try {
-          const response = await fetch(API_BASE, {
+          const response = await fetch(METADATA_API, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
           if (response.ok) {
+            const result = await response.json();
+            const newGameID = result.game.ID;
+            // After adding the game, check for images.
+            await uploadImages(newGameID);
             alert("Game added successfully!");
             gameForm.reset();
           } else {
@@ -291,6 +343,6 @@
         }
       });
     }
-  </script>
+  </script>  
 </body>
 </html>

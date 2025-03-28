@@ -184,12 +184,14 @@ async function editImages(id, banner, cover, ss1, ss2, ss3) {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
     
-    // Define the target directory for images: 
-    // Since this file is in resources/scripts, the images folder is at ../images/games/{id}.
+    // Define the target directory for images.
+    // Since this file is in resources/scripts, the images folder is at ../images/games/{id}
     const targetDir = path.join(__dirname, '../images/games', String(id));
+    console.log("editImages: Target directory is", targetDir);
     
     // Create the target directory (and parent directories) if it doesn't exist.
     await fs.promises.mkdir(targetDir, { recursive: true });
+    console.log("editImages: Successfully created (or confirmed) target directory.");
     
     // Prepare an array mapping each image input to its target file name.
     const imageMappings = [
@@ -204,9 +206,13 @@ async function editImages(id, banner, cover, ss1, ss2, ss3) {
     for (const mapping of imageMappings) {
       if (mapping.image) {
         const outPath = path.join(targetDir, mapping.filename);
+        console.log(`editImages: Processing ${mapping.filename}, saving to ${outPath}`);
         await sharp(mapping.image)
           .webp()
           .toFile(outPath);
+        console.log(`editImages: Successfully processed ${mapping.filename}`);
+      } else {
+        console.log(`editImages: No image provided for ${mapping.filename}`);
       }
     }
     return true;
