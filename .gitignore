@@ -4,4 +4,3 @@
 pom.xml
 __pycache__
 *.json
-node_modules/
