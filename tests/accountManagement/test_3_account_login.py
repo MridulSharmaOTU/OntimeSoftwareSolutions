@@ -2,18 +2,14 @@ import subprocess
 import pytest
 
 def run_login_credentials(username, password):
-    """
-    Invokes the Node.js loginCredentials function via a CLI call.
-    Expected usage:
-    node resources/scripts/accountManagement/verifyLogin.js loginCredentials <username> <password>
-    """
     cmd = [
         'node',
-        'resources/scripts/accountManagement/verifyLogin.js',
+        'resources/scripts/accountManagement/verifyLogin.cjs',
         'loginCredentials',
         username,
         password
     ]
+
     result = subprocess.run(cmd, capture_output=True, text=True)
     return result.returncode, result.stdout.strip(), result.stderr
 

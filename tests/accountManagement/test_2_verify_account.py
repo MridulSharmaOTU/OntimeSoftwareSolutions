@@ -24,17 +24,13 @@ def get_account_by_username(username):
     return None
 
 def run_verify_account(username):
-    """
-    Invokes the Node.js verifyAccount function via a CLI call.
-    Assumes that verifyEmail.js accepts command-line arguments in the form:
-    node resources/scripts/accountManagement/verifyEmail.js verifyAccount <username>
-    """
     cmd = [
         'node',
-        'resources/scripts/accountManagement/verifyEmail.js',
+        'resources/scripts/accountManagement/verifyEmail.cjs',  # ✅ RIGHT
         'verifyAccount',
         username
     ]
+
     result = subprocess.run(cmd, capture_output=True, text=True)
     return result.returncode, result.stdout, result.stderr
 
