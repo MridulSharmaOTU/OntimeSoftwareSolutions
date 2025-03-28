@@ -1,0 +1,3 @@
+username,password,email,admin,verified
+default,user,user@localhost,FALSE,TRUE
+admin,cusadmin,admin@localhost,TRUE,TRUE
