@@ -3,3 +3,5 @@
 .$classes_uml.drawio.bkp
 pom.xml
 __pycache__
+*.json
+node_modules/

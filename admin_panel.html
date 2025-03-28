@@ -123,155 +123,174 @@
     </form>
   </div>
   
-  <script type="module">
-    import { getGameMetadataById } from './resources/scripts/loadMetadata.js';
-    import { addGame, editGame, deleteGame } from './resources/scripts/editMetadata.js';
+  <script>
+    // API base points to the server running on port 3000.
+    const API_BASE = "http://localhost:3000/data";
     
-    const params = new URLSearchParams(window.location.search);
-    const editID = params.get('editID');
-    const pageTitle = document.getElementById('pageTitle');
-    const updateButton = document.getElementById('updateButton');
-    const deleteButton = document.getElementById('deleteButton');
-    const gameForm = document.getElementById('gameForm');
-  
-    // Helper: returns the trimmed value or null if empty.
+    // Helper function to return trimmed value or null if empty.
     const valueOrNull = (id) => {
       const elem = document.getElementById(id);
       if (!elem) return null;
       const val = elem.value;
       return val.trim() === "" ? null : val.trim();
     };
-  
+    
+    const params = new URLSearchParams(window.location.search);
+    const editID = params.get("editID");
+    const pageTitle = document.getElementById("pageTitle");
+    const updateButton = document.getElementById("updateButton");
+    const deleteButton = document.getElementById("deleteButton");
+    const gameForm = document.getElementById("gameForm");
+    
     if (editID) {
-      // Edit mode: show delete button, change button text, and load current metadata.
+      // Edit mode: Show delete button and change update button text.
       pageTitle.textContent = "Game Page - (Loading...)";
       deleteButton.style.display = "inline-block";
       updateButton.textContent = "Update";
-  
-      // Load metadata for this game.
-      getGameMetadataById(editID).then(metadata => {
-        if (metadata) {
-          pageTitle.textContent = "Game Page - " + metadata.Title;
-          // Update placeholders with current metadata.
-          document.getElementById('title').placeholder = metadata.Title;
-          document.getElementById('descriptionS').placeholder = metadata.DescriptionS;
-          document.getElementById('descriptionL').placeholder = metadata.DescriptionL;
-          document.getElementById('devPub').placeholder = metadata["Developer/Publisher"];
-          document.getElementById('ageRating').placeholder = metadata.Age;
-          document.getElementById('rating').placeholder = metadata.Rating;
-          document.getElementById('completionTime').placeholder = metadata["Average Completion Time"];
-          document.getElementById('trailer').placeholder = metadata.Trailer;
-          document.getElementById('releaseDate').value = metadata["Release Date"];
-  
-          // Pre-check genre checkboxes.
-          if (metadata.Genre) {
-            const genres = metadata.Genre.split(',').map(g => g.trim());
-            document.querySelectorAll('input[name="genre"]').forEach(checkbox => {
-              if (genres.includes(checkbox.value)) {
-                checkbox.checked = true;
-              }
-            });
+      
+      // Fetch current game data.
+      fetch(API_BASE)
+        .then(response => response.json())
+        .then(games => {
+          const game = games.find(g => g.ID == editID);
+          if (game) {
+            pageTitle.textContent = "Game Page - " + game.Title;
+            document.getElementById("title").placeholder = game.Title;
+            document.getElementById("descriptionS").placeholder = game.DescriptionS;
+            document.getElementById("descriptionL").placeholder = game.DescriptionL;
+            document.getElementById("devPub").placeholder = game["Developer/Publisher"];
+            document.getElementById("ageRating").placeholder = game.Age;
+            document.getElementById("rating").placeholder = game.Rating;
+            document.getElementById("completionTime").placeholder = game["Average Completion Time"];
+            document.getElementById("trailer").placeholder = game.Trailer;
+            document.getElementById("releaseDate").value = game["Release Date"];
+            
+            if (game["Genre Tags"]) {
+              const genres = game["Genre Tags"].split("|").map(g => g.trim());
+              document.querySelectorAll('input[name="genre"]').forEach(checkbox => {
+                if (genres.includes(checkbox.value)) {
+                  checkbox.checked = true;
+                }
+              });
+            }
+            
+            if (game.Platform) {
+              const consoles = game.Platform.split("|").map(c => c.trim());
+              document.querySelectorAll('input[name="console"]').forEach(checkbox => {
+                if (consoles.includes(checkbox.value)) {
+                  checkbox.checked = true;
+                }
+              });
+            }
+          } else {
+            pageTitle.textContent = "Game Page - Game not found";
           }
-          // Pre-check console checkboxes.
-          if (metadata.Platform) {
-            const consoles = metadata.Platform.split(',').map(c => c.trim());
-            document.querySelectorAll('input[name="console"]').forEach(checkbox => {
-              if (consoles.includes(checkbox.value)) {
-                checkbox.checked = true;
-              }
-            });
-          }
-        } else {
-          pageTitle.textContent = "Game Page - Game not found";
-        }
-      });
-  
-      // Attach event listener for form submission in edit mode.
-      gameForm.addEventListener('submit', async (e) => {
+        })
+        .catch(err => {
+          console.error("Error fetching game data:", err);
+          pageTitle.textContent = "Game Page - Error loading game data";
+        });
+      
+      // Listen for form submission in edit mode.
+      gameForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        // Gather values, treating empty inputs as null.
-        const title = valueOrNull('title');
-        const descriptionS = valueOrNull('descriptionS');
-        const descriptionL = valueOrNull('descriptionL');
-        // Gather genres from checked checkboxes.
-        const genreElems = document.querySelectorAll('input[name="genre"]:checked');
-        let genreTags = Array.from(genreElems).map(el => el.value);
-        genreTags = genreTags.length ? genreTags.join('|') : null;
-        // Gather consoles from checked checkboxes.
-        const consoleElems = document.querySelectorAll('input[name="console"]:checked');
-        let platform = Array.from(consoleElems).map(el => el.value);
-        platform = platform.length ? platform.join('|') : null;
-        const developerPublisher = valueOrNull('devPub');
-        const age = valueOrNull('ageRating');
-        const rating = valueOrNull('rating');
-        const averageCompletionTime = valueOrNull('completionTime');
-        const releaseDate = document.getElementById('releaseDate').value.trim() === "" ? null : document.getElementById('releaseDate').value;
-        const trailer = valueOrNull('trailer');
-  
+        const payload = {
+          ID: editID,
+          Title: valueOrNull("title"),
+          DescriptionS: valueOrNull("descriptionS"),
+          DescriptionL: valueOrNull("descriptionL"),
+          "Genre Tags": Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(el => el.value).join("|") || null,
+          "Release Date": document.getElementById("releaseDate").value.trim() || null,
+          Platform: Array.from(document.querySelectorAll('input[name="console"]:checked')).map(el => el.value).join("|") || null,
+          "Developer/Publisher": valueOrNull("devPub"),
+          Age: valueOrNull("ageRating"),
+          Rating: valueOrNull("rating"),
+          "Average Completion Time": valueOrNull("completionTime"),
+          Trailer: valueOrNull("trailer")
+        };
+        
         try {
-          const updatedGame = await editGame(editID, title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
-          alert("Game updated successfully!");
+          // Use PUT if your server supports it for updates.
+          const response = await fetch(API_BASE, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            alert("Game updated successfully!");
+          } else {
+            alert("Failed to update game.");
+          }
         } catch (error) {
           console.error("Error updating game:", error);
-          alert("Failed to update game. Check console for details.");
+          alert("Error updating game. Check console for details.");
         }
       });
-  
-      // Attach event listener for the delete button.
-      deleteButton.addEventListener('click', async () => {
-        const confirmMessage = "⚠️ WARNING: Deleting this game will remove it from the database. This action cannot be undone. Are you sure you want to delete this game?";
+      
+      // Listen for delete button click.
+      deleteButton.addEventListener("click", async () => {
+        const confirmMessage = "⚠️ WARNING: Deleting this game is like losing your secret 1-Up in a boss fight! Do you really want to press 'Reset'?";
         if (confirm(confirmMessage)) {
           try {
-            const result = await deleteGame(editID);
-            if (result) {
-              alert("Game deleted successfully!");
-              // Redirect to add mode.
+            const response = await fetch(API_BASE, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id: editID })
+            });
+            if (response.ok) {
+              alert("Game deleted successfully! Game Over.");
               window.location.href = "admin_panel.html";
             } else {
-              alert("Deletion failed!");
+              alert("Failed to delete game.");
             }
           } catch (error) {
             console.error("Error deleting game:", error);
-            alert("An error occurred while deleting the game. Check the console for details.");
+            alert("Error deleting game. Check console for details.");
           }
         } else {
-          alert("Deletion aborted!");
+          alert("Deletion cancelled! Your extra life is safe!");
         }
       });
     } else {
-      // Add mode: hide delete button and set submit button text.
+      // Add mode: hide delete button and change update button text.
       pageTitle.textContent = "Game Page - Add Game";
       deleteButton.style.display = "none";
       updateButton.textContent = "Add Game";
       
-      gameForm.addEventListener('submit', async (e) => {
+      gameForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const title = valueOrNull('title');
-        const descriptionS = valueOrNull('descriptionS');
-        const descriptionL = valueOrNull('descriptionL');
-        const genreElems = document.querySelectorAll('input[name="genre"]:checked');
-        let genreTags = Array.from(genreElems).map(el => el.value);
-        genreTags = genreTags.length ? genreTags.join('|') : null;
-        const consoleElems = document.querySelectorAll('input[name="console"]:checked');
-        let platform = Array.from(consoleElems).map(el => el.value);
-        platform = platform.length ? platform.join('|') : null;
-        const developerPublisher = valueOrNull('devPub');
-        const age = valueOrNull('ageRating');
-        const rating = valueOrNull('rating');
-        const averageCompletionTime = valueOrNull('completionTime');
-        const releaseDate = document.getElementById('releaseDate').value.trim() === "" ? null : document.getElementById('releaseDate').value;
-        const trailer = valueOrNull('trailer');
+        const payload = {
+          Title: valueOrNull("title"),
+          DescriptionS: valueOrNull("descriptionS"),
+          DescriptionL: valueOrNull("descriptionL"),
+          "Genre Tags": Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(el => el.value).join("|") || null,
+          "Release Date": document.getElementById("releaseDate").value.trim() || null,
+          Platform: Array.from(document.querySelectorAll('input[name="console"]:checked')).map(el => el.value).join("|") || null,
+          "Developer/Publisher": valueOrNull("devPub"),
+          Age: valueOrNull("ageRating"),
+          Rating: valueOrNull("rating"),
+          "Average Completion Time": valueOrNull("completionTime"),
+          Trailer: valueOrNull("trailer")
+        };
         
         try {
-          const newGame = await addGame(title, descriptionS, genreTags, releaseDate, platform, developerPublisher, age, rating, averageCompletionTime, descriptionL, trailer);
-          alert("Game added successfully! ID: " + newGame.ID);
-          gameForm.reset();
+          const response = await fetch(API_BASE, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            alert("Game added successfully!");
+            gameForm.reset();
+          } else {
+            alert("Failed to add game.");
+          }
         } catch (error) {
           console.error("Error adding game:", error);
-          alert("Failed to add game. Check console for details.");
+          alert("Error adding game. Check console for details.");
         }
       });
     }
-  </script>  
+  </script>
 </body>
 </html>
