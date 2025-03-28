@@ -4,7 +4,7 @@ import pytest
 def run_login_credentials(username, password):
     cmd = [
         'node',
-        'resources/scripts/accountManagement/verifyLogin.cjs',
+        'resources/scripts/accountManagement/verifyLogin.js',
         'loginCredentials',
         username,
         password
