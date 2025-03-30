@@ -26,7 +26,7 @@ def get_account_by_username(username):
 def run_verify_account(username):
     cmd = [
         'node',
-        'resources/scripts/accountManagement/verifyEmail.js',  # ✅ RIGHT
+        'resources/scripts/accountManagement/verifyEmail.js',
         'verifyAccount',
         username
     ]
