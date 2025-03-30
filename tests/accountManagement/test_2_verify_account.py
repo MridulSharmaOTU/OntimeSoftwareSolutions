@@ -45,8 +45,8 @@ def ensure_accounts_exist():
     assert default is not None, "Default account must exist before running verification test"
     assert admin is not None, "Admin account must exist before running verification test"
     # Verify that the accounts are not already verified
-    assert default['verified'] in ['0', 'FALSE'], "Default account should be unverified before test"
-    assert admin['verified'] in ['0', 'FALSE'], "Admin account should be unverified before test"
+    assert default['verified'] in ['0', 'false', False], "Default account should be unverified before test"
+    assert admin['verified'] in ['0', 'false', False], "Admin account should be unverified before test"
     yield
 
 def test_verify_accounts():
@@ -62,7 +62,7 @@ def test_verify_accounts():
     default_account = get_account_by_username('default')
     admin_account = get_account_by_username('admin')
 
-    assert default_account is not None and default_account['verified'] in ['1', 'TRUE'], \
+    assert default_account is not None and default_account['verified'] in ['1', 'true', True], \
         "Default account was not verified correctly"
-    assert admin_account is not None and admin_account['verified'] in ['1', 'TRUE'], \
+    assert admin_account is not None and admin_account['verified'] in ['1', 'true', True], \
         "Admin account was not verified correctly"
