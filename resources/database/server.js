@@ -1,34 +1,36 @@
 // server.js in resources/database (ES Module version)
 import express from "express";
 import cors from "cors";
+import multer from "multer"; // This also requires `sharp`
+import jwt from "jsonwebtoken"; // This also requires `nodemailer`
 import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
-import multer from "multer";
 
-// Use memory storage for file uploads.
-const upload = multer({ storage: multer.memoryStorage() });
-
-// Import our CSV functions from editMetadata.js
+// Existing imports for metadata games handling
 import { addGame, editGame, deleteGame, editImages } from "../scripts/editMetadata.js";
-
-// Import the function to load metadata games from loadMetadata.js
 import { loadMetadataGames } from "../scripts/loadMetadata.js";
+
+// Import account management services
+import { createAccount } from "../scripts/accountManagement/register.js";
+import { sendVerificationEmail } from "../scripts/accountManagement/emailService.js";
+import { verifyAccount } from "../scripts/accountManagement/verifyEmail.js";
+// import loginRouter from "../scripts/accountManagement/verifyLogin.js";
 
 // Set __filename and __dirname in ES module style.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000; // Choose a port that doesn't conflict with your Maven/Jetty server
+const PORT = process.env.PORT || 3000;
 
-// Enable CORS so your admin panel (served on a different port) can make requests.
+// Enable CORS so your admin panel can make requests.
 app.use(cors());
 // Parse JSON bodies.
 app.use(bodyParser.json());
 
-// Path to the CSV file (assumes metadataGames.csv is in the same folder as server.js)
-const csvFilePath = path.join(__dirname, "metadataGames.csv");
+// Memory storage for file uploads.
+const upload = multer({ storage: multer.memoryStorage() });
 
 /**
  * GET /data
@@ -159,7 +161,6 @@ app.post("/images", upload.fields([
   { name: "ss2", maxCount: 1 },
   { name: "ss3", maxCount: 1 }
 ]), async (req, res) => {
-  
   try {
     const id = req.body.id;
     const banner = req.files.banner ? req.files.banner[0].buffer : null;
@@ -179,6 +180,84 @@ app.post("/images", upload.fields([
     res.status(500).json({ success: false, error: err.toString() });
   }
 });
+
+/**
+ * POST /api/register
+ * Endpoint to create a new account and send a verification email.
+ */
+app.post("/api/register", async (req, res) => {
+  try {
+    // Extract account details from the request body.
+    const { username, email, password, admin = false, verified = false } = req.body;
+
+    // Call the createAccount service to add the new user to accounts.csv.
+    await createAccount(username, password, email, admin, verified);
+
+    // Generate a verification token using a dummy secret key.
+    const token = jwt.sign({ email, username }, "dummy-secret-key", { expiresIn: "24h" });
+
+    // Send the verification email to the user.
+    await sendVerificationEmail(email, token);
+
+    res.status(201).json({ message: "Account created. Please check your email for verification." });
+  } catch (error) {
+    console.error("Error registering account:", error);
+    res.status(500).json({ message: "Account registration failed", error: error.toString() });
+  }
+});
+
+/**
+ * POST /api/register
+ * Endpoint to create a new account and send a verification email.
+ */
+app.post("/api/register", async (req, res) => {
+  try {
+    // Extract account details from the request body.
+    const { username, email, password, admin = false, verified = false } = req.body;
+
+    // Call the createAccount service to add the new user to accounts.csv.
+    await createAccount(username, password, email, admin, verified);
+
+    // Generate a verification token that includes both email and username.
+    const token = jwt.sign({ email, username }, "dummy-secret-key", { expiresIn: "24h" });
+
+    // Send the verification email to the user.
+    await sendVerificationEmail(email, token);
+
+    res.status(201).json({ message: "Account created. Please check your email for verification." });
+  } catch (error) {
+    console.error("Error registering account:", error);
+    res.status(500).json({ message: "Account registration failed", error: error.toString() });
+  }
+});
+
+/**
+ * GET /api/verify
+ * Endpoint to verify a user's account via a token.
+ */
+app.get("/api/verify", async (req, res) => {
+  const token = req.query.token;
+  if (!token) {
+    return res.status(400).send("Verification token is missing.");
+  }
+  try {
+    // Verify the token and extract payload (which now contains username and email)
+    const payload = jwt.verify(token, "dummy-secret-key");
+    const username = payload.username;
+    if (!username) {
+      return res.status(400).send("Invalid token payload.");
+    }
+    // Call verifyAccount() with the username
+    await verifyAccount(username);
+    res.send("Account verified. You can now log in.");
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(400).send("Invalid or expired token.");
+  }
+});
+
+// Mount additional account management routes if needed.
+// app.use("/api", loginRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

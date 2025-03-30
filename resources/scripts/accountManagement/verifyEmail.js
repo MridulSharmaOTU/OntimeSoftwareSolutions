@@ -1,43 +1,73 @@
-const fs = require('fs');
-const path = require('path');
+// verifyEmail.js (ES Module version)
+import { fileURLToPath } from "url";
+import path from "path";
+import { promises as fs } from "fs";
 
-const csvPath = path.join(__dirname, '../../database/accounts.csv');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const csvPath = path.join(__dirname, "../../database/accounts.csv");
 
-function verifyAccount(username) {
-  if (!fs.existsSync(csvPath)) {
-    console.error('accounts.csv not found');
-    process.exit(1);
+/**
+ * Asynchronously verifies a user account by updating the "verified" field to "TRUE"
+ * in the accounts.csv file.
+ *
+ * @param {string} username - The username of the account to verify.
+ * @returns {Promise<Object>} - Resolves with a message if the account is verified.
+ * @throws {Error} - If the file doesn't exist or the account is not found.
+ */
+async function verifyAccount(username) {
+  try {
+    // Check if the accounts.csv file exists.
+    await fs.access(csvPath);
+  } catch (err) {
+    throw new Error("accounts.csv not found");
   }
 
-  const lines = fs.readFileSync(csvPath, 'utf-8').split('\n').filter(Boolean);
-  const headers = lines[0].split(',');
-  const indexMap = headers.reduce((map, key, i) => (map[key] = i, map), {});
-  let found = false;
+  // Read the CSV file.
+  const data = await fs.readFile(csvPath, "utf8");
+  const lines = data.split("\n").filter(Boolean);
+  if (lines.length === 0) {
+    throw new Error("accounts.csv is empty");
+  }
 
+  const headers = lines[0].split(",");
+  const indexMap = {};
+  headers.forEach((header, i) => {
+    indexMap[header] = i;
+  });
+
+  let found = false;
   const updatedLines = lines.map((line, idx) => {
-    if (idx === 0) return line;
-    const cols = line.split(',');
-    if (cols[indexMap.username] === username) {
-      cols[indexMap.verified] = 'TRUE';
+    if (idx === 0) return line; // Keep header row unchanged.
+    const cols = line.split(",");
+    if (cols[indexMap["username"]] === username) {
+      cols[indexMap["verified"]] = true;
       found = true;
     }
-    return cols.join(',');
+    return cols.join(",");
   });
 
   if (!found) {
-    console.error('Account not found.');
-    process.exit(1);
+    throw new Error("Account not found.");
   }
 
-  fs.writeFileSync(csvPath, updatedLines.join('\n'), 'utf-8');
-  console.log('Account verified.');
-  process.exit(0);
+  // Write the updated CSV data back to the file.
+  await fs.writeFile(csvPath, updatedLines.join("\n"), "utf8");
+  return { message: "Account verified." };
 }
 
-if (require.main === module) {
-  const [, , command, username] = process.argv;
-  if (command === 'verifyAccount') {
-    verifyAccount(username);
-  }
-}
+export { verifyAccount };
 
+// CLI entry point for testing purposes.
+if (process.argv[2] === "verifyAccount") {
+  const username = process.argv[3];
+  verifyAccount(username)
+    .then(result => {
+      console.log(result.message);
+      process.exit(0);
+    })
+    .catch(err => {
+      console.error(err.message);
+      process.exit(1);
+    });
+}
