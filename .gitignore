@@ -1,6 +1,6 @@
 .idea/
 .vscode/
-.node_modules/
+node_modules/
 .$classes_uml.drawio.bkp
 pom.xml
 __pycache__
