@@ -1,57 +1,59 @@
-<!-- Navbar -->
-<nav class="navbar navbar-expand">
-  <div class="container-fluid navbar">
-    <div class="menu-toggle" id="menu-toggle" style="margin-right: 0.5em;">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <a style="color:rgb(48, 47, 47)" href="./index.html">
-      <i class="fa-solid fa-house" style="padding-left: 1rem; padding-right: 1rem; font-size:2rem"></i>
-    </a>
-    <!-- Nav Headers -->
-    <ul class="nav nav-links" id="nav-links">
-      <li class="nav-item dropdown">
-        <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Console</a>
-        <ul class="dropdown-menu bg-dark">
-          <li><a class="dropdown-item" href="results_page.html?console=Xbox">Xbox</a></li>
-          <li><a class="dropdown-item" href="results_page.html?console=PlayStation">PlayStation</a></li>
-          <li><a class="dropdown-item" href="results_page.html?console=Nintendo">Nintendo</a></li>
-        </ul>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Genre</a>
-        <ul class="dropdown-menu bg-dark">
-          <li><a class="dropdown-item" href="results_page.html?genre=Action">Action</a></li>
-          <li><a class="dropdown-item" href="results_page.html?genre=Adventure">Adventure</a></li>
-          <li><a class="dropdown-item" href="results_page.html?genre=RPG">RPG</a></li>
-          <li><a class="dropdown-item" href="results_page.html?genre=Platformer">Platformer</a></li>
-          <li><a class="dropdown-item" href="results_page.html?genre=Simulation">Simulation</a></li>
-          <li><a class="dropdown-item" href="results_page.html?genre=Shooter">Shooter</a></li>
-          <li><a class="dropdown-item" href="results_page.html?genre=Horror">Horror</a></li>
-          <li><a class="dropdown-item" href="results_page.html?genre=Racing">Racing</a></li>
-        </ul>
-      </li>
-      <li><a class="nav-link nav-font" href="results_page.html?sort=u">Rating</a></li>
-      <li><a class="nav-link nav-font">Favourites</a></li>
-    </ul>
-    <div class="search-container">
-      <input type="text" class="search-bar" placeholder="Search...">
-      <button class="search-button">Search</button>
-    </div>
-    <!-- Account Badge -->
-    <div class="dropdown">
-      <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-        <i class="fa-solid fa-user" style="padding-left: 1rem; padding-right: 1rem; font-size: 2rem; color:rgb(48, 47, 47)"></i>
-      </a>
-      <ul class="dropdown-menu bg-dark">
-        <li>
-          <a class="dropdown-item login-dropdown" href="#" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</a>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="./index.html"><img src="./resources/images/icons/house-fill.svg" alt="Home Page icon" height="30"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse nav-font" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Console</a>
+          <ul class="dropdown-menu bg-dark">
+            <li><a class="dropdown-item" href="results_page.html?console=Xbox">Xbox</a></li>
+            <li><a class="dropdown-item" href="results_page.html?console=PlayStation">PlayStation</a></li>
+            <li><a class="dropdown-item" href="results_page.html?console=Nintendo">Nintendo</a></li>
+          </ul>
         </li>
-        <li>
-          <a class="dropdown-item login-dropdown" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">Sign In</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Genre</a>
+          <ul class="dropdown-menu bg-dark">
+            <li><a class="dropdown-item" href="results_page.html?genre=Action">Action</a></li>
+            <li><a class="dropdown-item" href="results_page.html?genre=Adventure">Adventure</a></li>
+            <li><a class="dropdown-item" href="results_page.html?genre=RPG">RPG</a></li>
+            <li><a class="dropdown-item" href="results_page.html?genre=Platformer">Platformer</a></li>
+            <li><a class="dropdown-item" href="results_page.html?genre=Simulation">Simulation</a></li>
+            <li><a class="dropdown-item" href="results_page.html?genre=Shooter">Shooter</a></li>
+            <li><a class="dropdown-item" href="results_page.html?genre=Horror">Horror</a></li>
+            <li><a class="dropdown-item" href="results_page.html?genre=Racing">Racing</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-font" href="results_page.html?sort=u">Rating</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Favourites</a>
         </li>
       </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2 my-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2" type="submit">Search</button>
+      </form>
+      <!-- Account Badge -->
+      <div class="dropdown">
+        <a class="nav-link nav-font dropdown-toggle m-2" href="#" role="button" data-bs-toggle="dropdown">
+          <img src="./resources/images/icons/person-circle.svg" alt="account badge" height="40">
+        </a>
+        <ul class="dropdown-menu bg-dark">
+          <li>
+            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">Sign In</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
