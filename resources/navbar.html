@@ -1,52 +1,111 @@
+<!-- Navbar -->
 <nav class="navbar navbar-expand">
-    <div class="container-fluid navbar">
-      <div class="menu-toggle" id="menu-toggle" style="margin-right: 0.5em;">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <a style="color:rgb(48, 47, 47)" href="./index.html">
-        <i class="fa-solid fa-house" style="padding-left: 1rem; padding-right: 1rem; font-size:2rem"></i>
-      </a>
-      <!-- Nav Headers -->
-      <ul class="nav nav-links" id="nav-links">
-        <li class="nav-item dropdown">
-          <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Console</a>
-          <ul class="dropdown-menu bg-dark">
-            <li><a class="dropdown-item" href="results_page.html?console=Xbox">Xbox</a></li>
-            <li><a class="dropdown-item" href="results_page.html?console=PlayStation">PlayStation</a></li>
-            <li><a class="dropdown-item" href="results_page.html?console=Nintendo">Nintendo</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Genre</a>
-          <ul class="dropdown-menu bg-dark">
-            <li><a class="dropdown-item" href="results_page.html?genre=Action">Action</a></li>
-            <li><a class="dropdown-item" href="results_page.html?genre=Adventure">Adventure</a></li>
-            <li><a class="dropdown-item" href="results_page.html?genre=RPG">RPG</a></li>
-            <li><a class="dropdown-item" href="results_page.html?genre=Platformer">Platformer</a></li>
-            <li><a class="dropdown-item" href="results_page.html?genre=Simulation">Simulation</a></li>
-            <li><a class="dropdown-item" href="results_page.html?genre=Shooter">Shooter</a></li>
-            <li><a class="dropdown-item" href="results_page.html?genre=Horror">Horror</a></li>
-            <li><a class="dropdown-item" href="results_page.html?genre=Racing">Racing</a></li>
-          </ul>
-        </li>
-        <li><a class="nav-link nav-font" href="results_page.html?sort=u">Rating</a></li>
-        <li><a class="nav-link nav-font">Favourites</a></li>
-      </ul>
-      <div class="search-container">
-        <input type="text" class="search-bar" placeholder="Search...">
-        <button class="search-button">Search</button>
-      </div>
-      <!-- Account Badge -->
-      <div class="dropdown">
-        <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-          <i class="fa-solid fa-user" style="padding-left: 1rem; padding-right: 1rem; font-size: 2rem; color:rgb(48, 47, 47)"></i>
-        </a>
-        <ul class="dropdown-menu bg-dark">
-          <li><a class="dropdown-item login-dropdown">Sign Up</a></li>
-          <li><a class="dropdown-item login-dropdown">Sign In</a></li>
-        </ul>
-      </div>      
+  <div class="container-fluid navbar">
+    <div class="menu-toggle" id="menu-toggle" style="margin-right: 0.5em;">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
+    <a style="color:rgb(48, 47, 47)" href="./index.html">
+      <i class="fa-solid fa-house" style="padding-left: 1rem; padding-right: 1rem; font-size:2rem"></i>
+    </a>
+    <!-- Nav Headers -->
+    <ul class="nav nav-links" id="nav-links">
+      <li class="nav-item dropdown">
+        <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Console</a>
+        <ul class="dropdown-menu bg-dark">
+          <li><a class="dropdown-item" href="results_page.html?console=Xbox">Xbox</a></li>
+          <li><a class="dropdown-item" href="results_page.html?console=PlayStation">PlayStation</a></li>
+          <li><a class="dropdown-item" href="results_page.html?console=Nintendo">Nintendo</a></li>
+        </ul>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Genre</a>
+        <ul class="dropdown-menu bg-dark">
+          <li><a class="dropdown-item" href="results_page.html?genre=Action">Action</a></li>
+          <li><a class="dropdown-item" href="results_page.html?genre=Adventure">Adventure</a></li>
+          <li><a class="dropdown-item" href="results_page.html?genre=RPG">RPG</a></li>
+          <li><a class="dropdown-item" href="results_page.html?genre=Platformer">Platformer</a></li>
+          <li><a class="dropdown-item" href="results_page.html?genre=Simulation">Simulation</a></li>
+          <li><a class="dropdown-item" href="results_page.html?genre=Shooter">Shooter</a></li>
+          <li><a class="dropdown-item" href="results_page.html?genre=Horror">Horror</a></li>
+          <li><a class="dropdown-item" href="results_page.html?genre=Racing">Racing</a></li>
+        </ul>
+      </li>
+      <li><a class="nav-link nav-font" href="results_page.html?sort=u">Rating</a></li>
+      <li><a class="nav-link nav-font">Favourites</a></li>
+    </ul>
+    <div class="search-container">
+      <input type="text" class="search-bar" placeholder="Search...">
+      <button class="search-button">Search</button>
+    </div>
+    <!-- Account Badge -->
+    <div class="dropdown">
+      <a class="nav-link nav-font dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-user" style="padding-left: 1rem; padding-right: 1rem; font-size: 2rem; color:rgb(48, 47, 47)"></i>
+      </a>
+      <ul class="dropdown-menu bg-dark">
+        <li>
+          <a class="dropdown-item login-dropdown" href="#" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</a>
+        </li>
+        <li>
+          <a class="dropdown-item login-dropdown" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">Sign In</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="signUpModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header p-4 pb-3 border-bottom-0">
+        <h1 class="fw-bold mb-0 fs-4">Sign Up</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control rounded-3" id="signUpEmail" placeholder="name@example.com">
+            <label for="signUpEmail">Email address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="username" class="form-control rounded-3" id="signUpUsername" placeholder="Username">
+            <label for="signUpUsername">Username</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control rounded-3" id="signUpPassword" placeholder="Password">
+            <label for="signUpPassword">Password</label>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sign In Modal -->
+<div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header p-4 pb-3 border-bottom-0">
+        <h1 class="fw-bold mb-0 fs-4">Sign In</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="form-floating mb-3">
+            <input type="username" class="form-control rounded-3" id="signInUsername" placeholder="Username">
+            <label for="signInUsername">Username</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control rounded-3" id="signInPassword" placeholder="Password">
+            <label for="signInPassword">Password</label>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
