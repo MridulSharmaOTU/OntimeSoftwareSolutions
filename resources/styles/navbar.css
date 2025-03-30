@@ -16,7 +16,6 @@
 }
 .hover-effect {
     fill: #aaa;
-    transition: fill 0.3s ease;
 }
 .hover-effect:hover {
     fill: #000; /* Change color on hover */
