@@ -1,8 +1,9 @@
 // server.js in resources/database (ES Module version)
-import express from "express";
 import cors from "cors";
-import multer from "multer"; // This also requires `sharp`
+import express from "express";
 import jwt from "jsonwebtoken"; // This also requires `nodemailer`
+import multer from "multer"; // This also requires `sharp`
+
 import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
