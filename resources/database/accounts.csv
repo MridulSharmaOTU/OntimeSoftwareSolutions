@@ -1,3 +1,4 @@
 username,password,email,admin,verified
 default,user,user@localhost,false,true
 admin,cusadmin,admin@localhost,true,true
+dummy,yeah,dummy@localhost,false,true
