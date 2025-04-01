@@ -7,7 +7,20 @@
 }
 .game-container{
     transition: transform 0.5s;
+    width: 100%;
+    aspect-ratio: 4 / 6;
+    object-fit: cover;
 }
 .game-container:hover{
     transform: scale(1.05);
+}
+@media (max-width: 992px) {
+    .remove1 {
+        display: none;
+    }
+}
+@media (max-width: 768px) {
+    .remove2 {
+        display: none;
+    }
 }
