@@ -17,4 +17,9 @@
   
   .card:hover {
     transform: scale(1.02);
-  }  
+  }
+.card-img-top {
+  width: 100%; /* Ensures the image fills the card width */
+  aspect-ratio: 4 / 6; /* Maintains 4:5 ratio */
+  object-fit: cover; /* Ensures images scale properly */
+}
