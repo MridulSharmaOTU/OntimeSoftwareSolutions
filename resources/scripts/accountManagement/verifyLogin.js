@@ -12,7 +12,7 @@ const csvPath = path.join(__dirname, "../../database/accounts.csv");
  *
  * @param {string} username - The username entered by the user.
  * @param {string} password - The password entered by the user.
- * @returns {Promise<Object>} - Resolves with { success: true } if the login is successful,
+ * @returns {Promise<Object>} - Resolves with { success: true, isAdmin: true/false } if login is successful,
  *                              or { success: false, error: "User not found." } or
  *                              { success: false, error: "Incorrect password." }.
  */
@@ -48,17 +48,17 @@ async function loginCredentials(username, password) {
     return { success: false, error: "User not found." };
   }
 
-  // Check if the password matches
   if (userRow[indexMap["password"]] !== password) {
     return { success: false, error: "Incorrect password." };
   }
 
-  // Optionally, you can also verify if the account has been verified
   if (userRow[indexMap["verified"]].toUpperCase() !== "TRUE") {
     return { success: false, error: "Account not verified." };
   }
 
-  return { success: true };
+  // Check if the user is an admin
+  const isAdmin = userRow[indexMap["admin"]].toUpperCase() === "TRUE";
+  return { success: true, isAdmin };
 }
 
 export { loginCredentials };

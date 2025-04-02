@@ -103,6 +103,7 @@ class NavbarComponent extends HTMLElement {
         if (response.ok) {
           // Store the username in localStorage for this session.
           localStorage.setItem('loggedInUser', username);
+          localStorage.setItem('isAdmin', result.isAdmin ? 'true' : 'false');
           alert("Logged in successfully.");
           // Optionally close the modal.
           const signInModalElement = document.getElementById('signInModal');
@@ -148,6 +149,7 @@ class NavbarComponent extends HTMLElement {
             const result = await response.json();
             if (response.ok) {
               localStorage.removeItem('loggedInUser');
+              localStorage.setItem('isAdmin', 'false');
               alert("Logged out successfully.");
               this.updateAccountBadge();
             } else {

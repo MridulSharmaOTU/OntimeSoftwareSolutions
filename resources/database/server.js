@@ -277,11 +277,10 @@ app.post('/api/login', async (req, res) => {
   try {
     const result = await loginCredentials(username, password);
     if (result.success) {
-      // Store user data in session
-      req.session.user = { username };
-      res.json({ success: true, message: "Logged in successfully" });
+      // Store user data in session, including admin status.
+      req.session.user = { username, isAdmin: result.isAdmin };
+      res.json({ success: true, message: "Logged in successfully", isAdmin: result.isAdmin });
     } else {
-      // Return error message based on login failure reason
       res.status(400).json({ success: false, error: result.error });
     }
   } catch (err) {
