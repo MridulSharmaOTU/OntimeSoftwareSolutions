@@ -18,8 +18,8 @@
     <navbar-component></navbar-component>
     
     <!-- Edit Button (visible only for admin users) -->
-    <div id="editButtonContainer" class="container text-end mt-3" style="display: none;">
-      <button id="editButton" class="btn btn-warning">Edit</button>
+    <div id="editGameButtonContainer" class="container text-end mt-3" style="display: none;">
+      <button id="editGameButton" class="btn btn-warning">Edit Game</button>
     </div>
 
     <div class="container mt-5">
@@ -102,16 +102,16 @@
     
       // Check if the user is an admin (assuming "isAdmin" is stored in localStorage as "true")
       if (localStorage.getItem('isAdmin') === 'true') {
-        const editContainer = document.getElementById('editButtonContainer');
+        const editContainer = document.getElementById('editGameButtonContainer');
         if (editContainer) {
           editContainer.style.display = 'block';
-          document.getElementById('editButton').addEventListener('click', () => {
+          document.getElementById('editGameButton').addEventListener('click', () => {
             window.location.href = `admin_panel.html?id=${gameId}`;
           });
         }
       } else {
         // Ensure the container is hidden for non-admin users.
-        const editContainer = document.getElementById('editButtonContainer');
+        const editContainer = document.getElementById('editGameButtonContainer');
         if (editContainer) {
           editContainer.style.display = 'none';
         }
