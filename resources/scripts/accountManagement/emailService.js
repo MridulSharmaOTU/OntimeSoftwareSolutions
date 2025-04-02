@@ -1,3 +1,4 @@
+// emailService.js (ES Module version)
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
