@@ -16,6 +16,12 @@
   <body class="bg-dark">
     <!-- Navbar -->
     <navbar-component></navbar-component>
+    
+    <!-- Edit Button (visible only for admin users) -->
+    <div id="editGameButtonContainer" class="container text-end mt-3" style="display: none;">
+      <button id="editGameButton" class="btn btn-warning">Edit Game</button>
+    </div>
+
     <div class="container mt-5">
         <div class="row text-center">
             <div class="col">
@@ -89,11 +95,28 @@
     <!-- Main script for game detail page -->
     <script type="module">
       import { getGameMetadataById } from './resources/scripts/loadMetadata.js';
-
+    
       // Get the game ID from the query parameter (?id=...)
       const urlParams = new URLSearchParams(window.location.search);
       const gameId = urlParams.get('id');
-
+    
+      // Check if the user is an admin (assuming "isAdmin" is stored in localStorage as "true")
+      if (localStorage.getItem('isAdmin') === 'true') {
+        const editContainer = document.getElementById('editGameButtonContainer');
+        if (editContainer) {
+          editContainer.style.display = 'block';
+          document.getElementById('editGameButton').addEventListener('click', () => {
+            window.location.href = `admin_panel.html?id=${gameId}`;
+          });
+        }
+      } else {
+        // Ensure the container is hidden for non-admin users.
+        const editContainer = document.getElementById('editGameButtonContainer');
+        if (editContainer) {
+          editContainer.style.display = 'none';
+        }
+      }
+    
       if (!gameId) {
         document.getElementById('game-description').innerHTML = '<h1>No game ID provided.</h1>';
       } else {
@@ -105,30 +128,30 @@
           // Remove surrounding quotes from the title
           const cleanTitle = gameData.Title.replace(/^"|"$/g, '');
           document.title = cleanTitle;
-
+    
           // Update carousel image with dynamic cover based on game ID
           const carouselImg = document.querySelector('#gameCarousel1 .carousel-item.active img');
           if (carouselImg) {
             carouselImg.src = './resources/images/games/' + gameId + '/banner.webp';
             carouselImg.alt = `Cover image for ${cleanTitle}`;
           }
-
+    
           // Update the description section with the game's description
           const descSection = document.getElementById('game-description');
           descSection.innerHTML = `
             <h1 class="heading-font-gamepage">Description</h1>
             <h2 style="color: white; font-size: medium;">${gameData.DescriptionL}</h2>
           `;
-
+    
           // Update screenshot images based on gameId
           document.getElementById('ss1').innerHTML = `
-          <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss1.webp" alt="">
+            <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss1.webp" alt="">
           `;
           document.getElementById('ss2').innerHTML = `
-          <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss2.webp" alt="">
+            <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss2.webp" alt="">
           `;
           document.getElementById('ss3').innerHTML = `
-          <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss3.webp" alt="">
+            <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss3.webp" alt="">
           `;
           
           // Update the YouTube trailer embed based on the "Trailer" field from CSV
@@ -136,11 +159,8 @@
           if (trailerIframe && gameData.Trailer) {
             trailerIframe.src = gameData.Trailer;
           }
-
-          // (Optional) You can update other sections here if you want to display more metadata
-          // For example, if you had placeholders for genre, release date, etc., you could update them here.
         });
       }
-    </script>
+    </script>    
   </body>
 </html>

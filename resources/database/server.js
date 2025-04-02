@@ -1,6 +1,7 @@
 // server.js in resources/database (ES Module version)
 import cors from "cors";
 import express from "express";
+import session from 'express-session';
 import jwt from "jsonwebtoken"; // This also requires `nodemailer`
 import multer from "multer"; // This also requires `sharp`
 
@@ -16,7 +17,7 @@ import { loadMetadataGames } from "../scripts/loadMetadata.js";
 import { createAccount } from "../scripts/accountManagement/register.js";
 import { sendVerificationEmail } from "../scripts/accountManagement/emailService.js";
 import { verifyAccount } from "../scripts/accountManagement/verifyEmail.js";
-// import loginRouter from "../scripts/accountManagement/verifyLogin.js";
+import { loginCredentials } from "../scripts/accountManagement/verifyLogin.js";
 
 // Set __filename and __dirname in ES module style.
 const __filename = fileURLToPath(import.meta.url);
@@ -29,6 +30,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 // Parse JSON bodies.
 app.use(bodyParser.json());
+
+// Store user sessions in memory (not recommended for production).
+// For production, consider using a store like Redis or MongoDB.
+app.use(session({
+  secret: 'dummy-key-two', // Replace with a strong secret key from an environment variable
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Set secure to true if using HTTPS
+}));
 
 // Memory storage for file uploads.
 const upload = multer({ storage: multer.memoryStorage() });
@@ -194,7 +204,7 @@ app.post("/api/register", async (req, res) => {
     // Call the createAccount service to add the new user to accounts.csv.
     await createAccount(username, password, email, admin, verified);
 
-    // Generate a verification token using a dummy secret key.
+    // Generate a verification token using a dummy secret key. Replace with a key in environment variable for production.
     const token = jwt.sign({ email, username }, "dummy-secret-key", { expiresIn: "24h" });
 
     // Send the verification email to the user.
@@ -257,8 +267,41 @@ app.get("/api/verify", async (req, res) => {
   }
 });
 
-// Mount additional account management routes if needed.
-// app.use("/api", loginRouter);
+/**
+ * POST /api/login
+ * Endpoint to authenticate a user using their username and password.
+ * On success, stores user data in the session so that the user remains logged in.
+ */
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const result = await loginCredentials(username, password);
+    if (result.success) {
+      // Store user data in session, including admin status.
+      req.session.user = { username, isAdmin: result.isAdmin };
+      res.json({ success: true, message: "Logged in successfully", isAdmin: result.isAdmin });
+    } else {
+      res.status(400).json({ success: false, error: result.error });
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ success: false, error: err.toString() });
+  }
+});
+
+/**
+ * POST /api/logout
+ * Endpoint to log a user out by destroying their session.
+ * This ensures that the user's session data is cleared and they are effectively logged out.
+ */
+app.post('/api/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ success: false, error: "Logout failed" });
+    }
+    res.json({ success: true, message: "Logged out successfully" });
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

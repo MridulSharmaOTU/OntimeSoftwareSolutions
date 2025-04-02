@@ -16,6 +16,12 @@
   <body class="bg-dark">
     <!-- Navbar -->
     <navbar-component></navbar-component>
+
+    <!-- Add Game Button (visible only for admin users) -->
+    <div id="addGameContainer" class="container text-end mt-3" style="display: none;">
+        <button id="addGameButton" class="btn btn-success">Add Game</button>
+    </div>
+  
     <div class="container mt-5">
         <a class="heading-font" style="color: darkred">Recent Releases</a>
         <hr class="border border-1 opacity-1">
@@ -130,6 +136,21 @@
             </div>
         </div>
     </div>
+
+    <script type="module">
+        // Check if the user is an admin by reading the "isAdmin" flag from localStorage
+        if (localStorage.getItem('isAdmin') === 'true') {
+          const addGameContainer = document.getElementById('addGameContainer');
+          if (addGameContainer) {
+            addGameContainer.style.display = 'block';
+            document.getElementById('addGameButton').addEventListener('click', () => {
+              // Redirect to admin_panel.html when the button is clicked.
+              window.location.href = 'admin_panel.html';
+            });
+          }
+        }
+    </script>      
+
     <!-- Bootstrap JS bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="./resources/scripts/landing_page.js"></script>
