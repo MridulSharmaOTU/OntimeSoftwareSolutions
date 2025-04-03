@@ -45,8 +45,10 @@ async function saveMetadata(data) {
     const { fileURLToPath } = await import('url');
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
+    const { ABSOLUTE_METADATA_PATH } = await import('../database/server.js');
+
     // Since this file is in resources/scripts, go up one level and then into database.
-    const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
+    const metadataPath = ABSOLUTE_METADATA_PATH || /* fallback: */ path.resolve(__dirname, '../database/metadataGames.csv');
     try {
       const csvText = convertToCSV(data);
       await fs.promises.writeFile(metadataPath, csvText, 'utf8');
@@ -186,7 +188,7 @@ async function editImages(id, banner, cover, ss1, ss2, ss3) {
     
     // Define the target directory for images.
     // Since this file is in resources/scripts, the images folder is at ../images/games/{id}
-    const targetDir = path.join(__dirname, '../images/games', String(id));
+    const targetDir = path.resolve(__dirname, '../images/games', String(id));
     
     // Create the target directory (and parent directories) if it doesn't exist.
     await fs.promises.mkdir(targetDir, { recursive: true });
@@ -203,7 +205,7 @@ async function editImages(id, banner, cover, ss1, ss2, ss3) {
     // Process each image: if provided, convert to WebP and save it.
     for (const mapping of imageMappings) {
       if (mapping.image) {
-        const outPath = path.join(targetDir, mapping.filename);
+        const outPath = path.resolve(targetDir, mapping.filename);
         await sharp(mapping.image)
           .webp()
           .toFile(outPath);
@@ -243,7 +245,7 @@ async function deleteGame(id) {
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = path.dirname(__filename);
       // The images folder is at: resources/images/games/{id}
-      const folderPath = path.join(__dirname, '../images/games', String(id));
+      const folderPath = path.resolve(__dirname, '../images/games', String(id));
       // Remove the folder recursively. Use fs.promises.rm if available, otherwise rmdir.
       if (fs.promises.rm) {
         await fs.promises.rm(folderPath, { recursive: true, force: true });

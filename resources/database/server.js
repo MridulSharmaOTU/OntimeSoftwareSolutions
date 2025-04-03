@@ -22,6 +22,9 @@ import { loginCredentials } from "../scripts/accountManagement/verifyLogin.js";
 // Set __filename and __dirname in ES module style.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const ABSOLUTE_METADATA_PATH = path.resolve(__dirname, "metadataGames.csv"); // Compute absolute path to metadataGames.csv at startup.
+
+export { ABSOLUTE_METADATA_PATH }; // Export the absolute path for use in other modules.
 
 const app = express();
 const PORT = process.env.PORT || 3000;

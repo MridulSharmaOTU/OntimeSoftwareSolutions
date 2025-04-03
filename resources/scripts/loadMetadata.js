@@ -23,8 +23,10 @@ async function loadMetadataGames() {
     const { fileURLToPath } = await import('url');
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
+    const { ABSOLUTE_METADATA_PATH } = await import('../database/server.js');
+
     // Adjust the relative path as necessary to point to your CSV file.
-    const metadataPath = path.join(__dirname, '../database/metadataGames.csv');
+    const metadataPath = ABSOLUTE_METADATA_PATH || /* fallback: */ path.resolve(__dirname, '../database/metadataGames.csv');
     try {
       const csvText = await fs.promises.readFile(metadataPath, 'utf8');
       return parseCSV(csvText);
