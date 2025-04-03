@@ -107,8 +107,6 @@
 
     <!-- Main script for game detail page -->
     <script type="module">
-      import { getGameMetadataById } from './resources/scripts/loadMetadata.js';
-    
       // Get the game ID from the query parameter (?id=...)
       const urlParams = new URLSearchParams(window.location.search);
       const gameId = urlParams.get('id');
