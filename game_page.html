@@ -23,81 +23,68 @@
     </div>
 
     <div class="container mt-5">
-      <div class="row text-center">
-        <div class="col">
-          <div id="gameCarousel1" class="carousel slide" data-bs-ride="carousel">
-            <div class="card">
-              <div class="carousel-inner">
-                <!-- Carousel item updated with dynamic banner image -->
-                <div class="carousel-item active">
-                  <img id="carouselImage" class="w-100 img-thumbnail" src="http://localhost:3000/images/games/0/banner.webp" alt=""/>
+        <div class="row text-center">
+            <div class="col">
+                <div id="gameCarousel1" class="carousel slide" data-ride="carousel">
+                    <div class="card">
+                        <div class="carousel-inner">
+                            <!-- This carousel item will be updated with the game's cover image -->
+                            <div class="carousel-item active">
+                                <img class="w-100 img-thumbnail" src="/resources/images/games/0/banner.webp" alt="">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-
-    <!-- Trailer Section -->
-    <div class="container mt-4">
-      <div class="row">
-        <div class="col">
-          <iframe id="trailerIframe" class="img-thumbnail" style="width:100%; height:400px;" 
-                  src="" 
-                  title="YouTube trailer" 
-                  frameborder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowfullscreen>
-          </iframe>
-        </div>
-      </div>
-    </div>
-
-    <!-- Screenshots Section -->
     <div class="container text-center mt-5">
-      <div class="row g-0">
-        <div class="col" id="ss1">
-          <img class="img-thumbnail" style="height: 10rem !important;" src="http://localhost:3000/images/games/0/ss1.webp" alt=""/>
+        <div class="row g-0">
+            <div class="col">
+                <iframe class="img-thumbnail" style="height: 10rem !important;"
+                        src="https://www.youtube.com/embed/E3Huy2cdih0?si=BcLzZfdUaHfRcSTm"
+                        title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write;
+                        encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen></iframe>
+            </div>
+            <div id="ss1" class="col">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/0/ss1.webp" alt="">
+            </div>
+            <div id="ss2" class="col">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/0/ss2.webp" alt="">
+            </div>
+            <div id="ss3" class="col">
+                <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/0/ss3.webp" alt="">
+            </div>
         </div>
-        <div class="col" id="ss2">
-          <img class="img-thumbnail" style="height: 10rem !important;" src="http://localhost:3000/images/games/0/ss2.webp" alt=""/>
-        </div>
-        <div class="col" id="ss3">
-          <img class="img-thumbnail" style="height: 10rem !important;" src="http://localhost:3000/images/games/0/ss3.webp" alt=""/>
-        </div>
-      </div>
     </div>
-
-    <!-- Description, News, and Ratings Section -->
     <div class="container">
-      <div class="row">
-        <div id="game-description" class="col">
-          <h1 class="heading-font-gamepage">Description</h1>
-          <h2 id="descriptionText" style="color: white; font-size: medium;">Loading description...</h2>
+        <div class="row">
+            <div id="game-description" class="col">
+                <h1 class="heading-font-gamepage">Description</h1>
+                <h2 style="color: white; font-size: medium;">placeholder description</h2>
+            </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h1 class="heading-font-gamepage">News</h1>
-          <h2 style="color: white; font-size: medium;">Lorem ipsum odor amet, consectetuer adipiscing elit. Primis blandit vitae mollis
-            potenti platea ad? Commodo viverra eu metus vehicula nec consectetur. Ante libero id porttitor
-            himenaeos turpis varius; ultrices leo tellus. Habitasse litora maecenas montes porta ad aptent
-            et. Habitasse gravida sociosqu egestas tincidunt porta hendrerit ac? Senectus molestie aenean
-            nulla ultricies laoreet donec consectetur ac. Phasellus pellentesque senectus proin nascetur
-            ut pellentesque litora penatibus...</h2>
+        <div class="row">
+            <div class="col">
+                <h1 class="heading-font-gamepage">News</h1>
+                <h2 style="color: white; font-size: medium;">Lorem ipsum odor amet, consectetuer adipiscing elit. Primis blandit vitae mollis
+                    potenti platea ad? Commodo viverra eu metus vehicula nec consectetur. Ante libero id porttitor
+                    himenaeos turpis varius; ultrices leo tellus. Habitasse litora maecenas montes porta ad aptent
+                    et. Habitasse gravida sociosqu egestas tincidunt porta hendrerit ac? Senectus molestie aenean
+                    nulla ultricies laoreet donec consectetur ac. Phasellus pellentesque senectus proin nascetur
+                    ut pellentesque litora penatibus.</h2>
+            </div>
+            <div class="col text-center">
+                <h1 class="heading-font-gamepage">Ratings</h1>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+                <i class="fa-solid fa-star full-star"></i>
+            </div>
         </div>
-        <div class="col text-center">
-          <h1 class="heading-font-gamepage">Ratings</h1>
-          <i class="fa-solid fa-star full-star"></i>
-          <i class="fa-solid fa-star full-star"></i>
-          <i class="fa-solid fa-star full-star"></i>
-          <i class="fa-solid fa-star full-star"></i>
-          <i class="fa-solid fa-star full-star"></i>
-        </div>
-      </div>
     </div>
-
     <!-- Bootstrap JS bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
@@ -113,7 +100,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const gameId = urlParams.get('id');
     
-      // Display edit button if user is admin (assuming admin flag stored in localStorage)
+      // Check if the user is an admin (assuming "isAdmin" is stored in localStorage as "true")
       if (localStorage.getItem('isAdmin') === 'true') {
         const editContainer = document.getElementById('editGameButtonContainer');
         if (editContainer) {
@@ -123,6 +110,7 @@
           });
         }
       } else {
+        // Ensure the container is hidden for non-admin users.
         const editContainer = document.getElementById('editGameButtonContainer');
         if (editContainer) {
           editContainer.style.display = 'none';
@@ -132,46 +120,47 @@
       if (!gameId) {
         document.getElementById('game-description').innerHTML = '<h1>No game ID provided.</h1>';
       } else {
-        // Fetch all games from the Node server
-        fetch("http://localhost:3000/data")
-          .then(response => response.json())
-          .then(games => {
-            const game = games.find(g => g.ID == gameId);
-            if (!game) {
-              document.getElementById('game-description').innerHTML = '<h1>Game not found.</h1>';
-              return;
-            }
-            // Clean up title if necessary.
-            const cleanTitle = game.Title.replace(/^"|"$/g, '');
-            document.title = cleanTitle;
+        getGameMetadataById(gameId).then(gameData => {
+          if (!gameData) {
+            document.getElementById('game-description').innerHTML = '<h1>Game not found.</h1>';
+            return;
+          }
+          // Remove surrounding quotes from the title
+          const cleanTitle = gameData.Title.replace(/^"|"$/g, '');
+          document.title = cleanTitle;
     
-            // Update carousel banner image.
-            const carouselImg = document.getElementById("carouselImage");
-            if (carouselImg) {
-              carouselImg.src = `http://localhost:3000/images/games/${gameId}/banner.webp`;
-              carouselImg.alt = `Cover image for ${cleanTitle}`;
-            }
-            
-            // Update trailer iframe.
-            const trailerIframe = document.getElementById("trailerIframe");
-            if (trailerIframe && game.Trailer) {
-              trailerIframe.src = game.Trailer;
-            }
+          // Update carousel image with dynamic cover based on game ID
+          const carouselImg = document.querySelector('#gameCarousel1 .carousel-item.active img');
+          if (carouselImg) {
+            carouselImg.src = './resources/images/games/' + gameId + '/banner.webp';
+            carouselImg.alt = `Cover image for ${cleanTitle}`;
+          }
     
-            // Update screenshot images.
-            document.getElementById("ss1").innerHTML = `<img class="img-thumbnail" style="height: 10rem !important;" src="http://localhost:3000/images/games/${gameId}/ss1.webp" alt="">`;
-            document.getElementById("ss2").innerHTML = `<img class="img-thumbnail" style="height: 10rem !important;" src="http://localhost:3000/images/games/${gameId}/ss2.webp" alt="">`;
-            document.getElementById("ss3").innerHTML = `<img class="img-thumbnail" style="height: 10rem !important;" src="http://localhost:3000/images/games/${gameId}/ss3.webp" alt="">`;
+          // Update the description section with the game's description
+          const descSection = document.getElementById('game-description');
+          descSection.innerHTML = `
+            <h1 class="heading-font-gamepage">Description</h1>
+            <h2 style="color: white; font-size: medium;">${gameData.DescriptionL}</h2>
+          `;
     
-            // Update the description section.
-            const descSection = document.getElementById("descriptionText");
-            descSection.textContent = game.DescriptionL || "No description available.";
-          })
-          .catch(error => {
-            console.error("Error loading metadata:", error);
-            document.getElementById('game-description').innerHTML = '<h1>Error loading game data.</h1>';
-          });
+          // Update screenshot images based on gameId
+          document.getElementById('ss1').innerHTML = `
+            <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss1.webp" alt="">
+          `;
+          document.getElementById('ss2').innerHTML = `
+            <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss2.webp" alt="">
+          `;
+          document.getElementById('ss3').innerHTML = `
+            <img class="img-thumbnail" style="height: 10rem !important;" src="./resources/images/games/${gameId}/ss3.webp" alt="">
+          `;
+          
+          // Update the YouTube trailer embed based on the "Trailer" field from CSV
+          const trailerIframe = document.querySelector('iframe');
+          if (trailerIframe && gameData.Trailer) {
+            trailerIframe.src = gameData.Trailer;
+          }
+        });
       }
-    </script>
+    </script>    
   </body>
 </html>
