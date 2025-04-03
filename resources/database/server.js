@@ -6,7 +6,10 @@ import jwt from "jsonwebtoken"; // This also requires `nodemailer`
 import multer from "multer"; // This also requires `sharp`
 import bodyParser from "body-parser";
 
-// Existing imports for metadata games handling
+// Import configuration for absolute paths
+import { ABSOLUTE_IMAGES_PATH } from "./config.js";
+
+// Imports for metadata games handling
 import { addGame, editGame, deleteGame, editImages } from "../scripts/editMetadata.js";
 import { loadMetadataGames } from "../scripts/loadMetadata.js";
 
@@ -32,6 +35,9 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false } // Set secure to true if using HTTPS
 }));
+
+// Serve static images using the path from config.js.
+app.use("/images", express.static(ABSOLUTE_IMAGES_PATH));
 
 // Memory storage for file uploads.
 const upload = multer({ storage: multer.memoryStorage() });
