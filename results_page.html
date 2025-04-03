@@ -34,14 +34,11 @@
             Sort
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <!-- The data-sort attribute will be used to generate the correct URL including the search query -->
             <li><a class="dropdown-item sort-option" data-sort="t" href="?sort=t">Title ↑</a></li>
             <li><a class="dropdown-item sort-option" data-sort="tr" href="?sort=tr">Title ↓</a></li>
             <li><a class="dropdown-item sort-option" data-sort="u" href="?sort=u">Rating ↑</a></li>
             <li><a class="dropdown-item sort-option" data-sort="ur" href="?sort=ur">Rating ↓</a></li>
-            <!-- For Release Date: Default (no sort param) is Release Date ↑ (newest first) -->
             <li><a class="dropdown-item sort-option" data-sort="" href="?">Release Date ↑</a></li>
-            <!-- And Release Date ↓ (oldest first) -->
             <li><a class="dropdown-item sort-option" data-sort="rr" href="?sort=rr">Release Date ↓</a></li>
           </ul>
         </div>
@@ -62,98 +59,85 @@
 
     <!-- Update dropdown links to retain search parameter -->
     <script>
-      // On DOMContentLoaded, update sort option links to include current search, console, and genre parameters
       document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const searchQuery = params.get("search") || "";
         const consoleParam = params.get("console") || "";
         const genreParam = params.get("genre") || "";
-
+  
         const sortLinks = document.querySelectorAll(".sort-option");
         sortLinks.forEach(link => {
-          const sortValue = link.getAttribute("data-sort"); // may be empty for default
+          const sortValue = link.getAttribute("data-sort"); 
           const newParams = new URLSearchParams();
-
           if (sortValue) newParams.set("sort", sortValue);
           if (searchQuery) newParams.set("search", searchQuery);
           if (consoleParam) newParams.set("console", consoleParam);
           if (genreParam) newParams.set("genre", genreParam);
-
+  
           link.setAttribute("href", "?" + newParams.toString());
         });
       });
     </script>
 
-    <!-- Custom JS to dynamically render search results -->
+    <!-- Main script to dynamically render search results -->
     <script type="module">
       import { searchByTitle } from "./resources/scripts/utils/search.js";
-      import { loadMetadataGames } from "./resources/scripts/loadMetadata.js";
       import { sortTitle, sortRelease, sortRating, reverse } from "./resources/scripts/utils/sort.js";
-
+      
       /**
-       * Renders the search results as rectangular cards.
-       * Each card displays the game's title, cover image, short description, and platforms.
+       * Renders the search results as cards.
        * @param {Array<Object>} results - Array of game objects.
        */
       function renderResults(results) {
         const container = document.getElementById("results-container");
-        container.innerHTML = ""; // Clear any existing results.
+        container.innerHTML = "";
         results.forEach(game => {
-          // Create a column wrapper.
           const col = document.createElement("div");
           col.className = "col-md-4 mb-4";
-          // Create a link wrapping the card.
           const link = document.createElement("a");
           link.href = `game_page.html?id=${game.ID}`;
-          // Create the card element.
           const card = document.createElement("div");
           card.className = "card h-100 bg-light text-dark";
-          // Create the cover image.
           const img = document.createElement("img");
-          img.src = `./resources/images/games/${game.ID}/cover.webp`;
+          // Update the image source to load from the Node server's static route
+          img.src = `http://localhost:3000/images/games/${game.ID}/cover.webp`;
           img.className = "card-img-top";
           img.alt = `${game.Title} Cover`;
           card.appendChild(img);
-          // Create the card body.
           const cardBody = document.createElement("div");
           cardBody.className = "card-body";
-          // Add the game title.
           const title = document.createElement("h5");
           title.className = "card-title";
           title.textContent = game.Title;
           cardBody.appendChild(title);
-          // Add the game description (short).
           const desc = document.createElement("p");
           desc.className = "card-text";
           desc.textContent = game.DescriptionS;
           cardBody.appendChild(desc);
-          // Add the platforms information.
           const platforms = document.createElement("p");
           platforms.className = "card-text";
           platforms.innerHTML = `<small class="text-muted">Available on: ${game.Platform}</small>`;
           cardBody.appendChild(platforms);
-          // Assemble the card.
           card.appendChild(cardBody);
           link.appendChild(card);
           col.appendChild(link);
           container.appendChild(col);
         });
       }
-
-      // 1. Grab query params (search + sort)
+      
+      // Get query parameters.
       const params = new URLSearchParams(window.location.search);
       const searchQuery = params.get("search") || "";
-      const sortParam = params.get("sort") || ""; // Default: no sort parameter means Release Date ↑ (newest first)
+      const sortParam = params.get("sort") || "";
       const consoleParam = params.get("console") || "";
       const genreParam = params.get("genre") || "";
       
-      // 2. Load all games, then filter, sort, and render results.
-      loadMetadataGames()
+      // Fetch all games from the Node server.
+      fetch("http://localhost:3000/data")
+        .then(response => response.json())
         .then(allGames => {
-          // Filter by search query.
           let results = searchByTitle(allGames, searchQuery);
-
-          // Filter by console if provided.
+  
           if (consoleParam) {
             const consoleLower = consoleParam.toLowerCase();
             results = results.filter(game => {
@@ -161,8 +145,7 @@
               return platforms.includes(consoleLower);
             });
           }
-
-          // Filter by genre if provided.
+  
           if (genreParam) {
             const genreLower = genreParam.toLowerCase();
             results = results.filter(game => {
@@ -170,32 +153,31 @@
               return genres.includes(genreLower);
             });
           }
-
-          // Sort the filtered results based on sortParam.
+  
           switch (sortParam) {
-            case "t": // Title ascending (A→Z)
+            case "t":
               sortTitle(results);
               break;
-            case "tr": // Title descending (Z→A)
+            case "tr":
               sortTitle(results);
               reverse(results);
               break;
-            case "u": // Rating descending (highest→lowest)
+            case "u":
               sortRating(results);
               break;
-            case "ur": // Rating ascending (lowest→highest)
+            case "ur":
               sortRating(results);
               reverse(results);
               break;
-            case "rr": // Release Date ↓ (oldest first)
+            case "rr":
               sortRelease(results);
               reverse(results);
               break;
-            default: // Default: Release Date ↑ (newest first)
+            default:
               sortRelease(results);
               break;
           }
-
+  
           renderResults(results);
         })
         .catch(error => {
