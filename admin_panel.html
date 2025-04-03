@@ -9,7 +9,8 @@
 <body>
   <div class="container">
     <h1 id="pageTitle">Game Page - Add Game</h1>
-    
+    <img id="backIcon" src="resources/images/icons/arrow-return-left.svg" href="./index.html" alt="Back" />
+
     <form id="gameForm" class="game-form">
       <!-- Title -->
       <div class="form-row">
@@ -66,7 +67,7 @@
       <!-- Rating -->
       <div class="form-row">
         <label for="rating">Rating:</label>
-        <input type="text" id="rating" name="rating" placeholder="0" />
+        <input type="text" id="rating" name="rating" placeholder="0-5 (including float values)" />
       </div>
       
       <!-- Completion Time -->
@@ -345,6 +346,11 @@
         }
       });
     }
+
+    // Back button functionality
+    document.getElementById("backIcon").addEventListener("click", () => {
+      window.location.href = "index.html"; // Redirect to the main page.
+    });
   </script>  
 </body>
 </html>
