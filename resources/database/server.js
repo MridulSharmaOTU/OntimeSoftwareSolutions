@@ -4,12 +4,12 @@ import express from "express";
 import session from 'express-session';
 import jwt from "jsonwebtoken"; // This also requires `nodemailer`
 import multer from "multer"; // This also requires `sharp`
-
 import bodyParser from "body-parser";
-import path from "path";
-import { fileURLToPath } from "url";
 
-// Existing imports for metadata games handling
+// Import configuration for absolute paths
+import { ABSOLUTE_IMAGES_PATH } from "./config.js";
+
+// Imports for metadata games handling
 import { addGame, editGame, deleteGame, editImages } from "../scripts/editMetadata.js";
 import { loadMetadataGames } from "../scripts/loadMetadata.js";
 
@@ -18,13 +18,6 @@ import { createAccount } from "../scripts/accountManagement/register.js";
 import { sendVerificationEmail } from "../scripts/accountManagement/emailService.js";
 import { verifyAccount } from "../scripts/accountManagement/verifyEmail.js";
 import { loginCredentials } from "../scripts/accountManagement/verifyLogin.js";
-
-// Set __filename and __dirname in ES module style.
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ABSOLUTE_METADATA_PATH = path.resolve(__dirname, "metadataGames.csv"); // Compute absolute path to metadataGames.csv at startup.
-
-export { ABSOLUTE_METADATA_PATH }; // Export the absolute path for use in other modules.
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,6 +35,9 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false } // Set secure to true if using HTTPS
 }));
+
+// Serve static images using the path from config.js.
+app.use("/images", express.static(ABSOLUTE_IMAGES_PATH));
 
 // Memory storage for file uploads.
 const upload = multer({ storage: multer.memoryStorage() });

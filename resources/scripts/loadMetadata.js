@@ -19,16 +19,11 @@ async function loadMetadataGames() {
   if (typeof process !== 'undefined' && process.versions != null && process.versions.node != null) {
     // Node environment: use dynamic imports for Node modules.
     const fs = await import('fs');
-    const path = await import('path');
-    const { fileURLToPath } = await import('url');
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const { ABSOLUTE_METADATA_PATH } = await import('../database/server.js');
 
-    // Adjust the relative path as necessary to point to your CSV file.
-    const metadataPath = ABSOLUTE_METADATA_PATH || /* fallback: */ path.resolve(__dirname, '../database/metadataGames.csv');
+    const { ABSOLUTE_METADATA_PATH } = await import('../database/config.js');
+
     try {
-      const csvText = await fs.promises.readFile(metadataPath, 'utf8');
+      const csvText = await fs.promises.readFile(ABSOLUTE_METADATA_PATH, 'utf8');
       return parseCSV(csvText);
     } catch (error) {
       console.error('Error reading metadataGames.csv in Node:', error);
