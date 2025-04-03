@@ -41,17 +41,11 @@ async function saveMetadata(data) {
   if (typeof process !== 'undefined' && process.versions != null && process.versions.node != null) {
     // Node environment: dynamically import Node modules.
     const fs = await import('fs');
-    const path = await import('path');
-    const { fileURLToPath } = await import('url');
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const { ABSOLUTE_METADATA_PATH } = await import('../database/server.js');
+    const { ABSOLUTE_METADATA_PATH } = await import('../database/config.js');
 
-    // Since this file is in resources/scripts, go up one level and then into database.
-    const metadataPath = ABSOLUTE_METADATA_PATH || /* fallback: */ path.resolve(__dirname, '../database/metadataGames.csv');
     try {
       const csvText = convertToCSV(data);
-      await fs.promises.writeFile(metadataPath, csvText, 'utf8');
+      await fs.promises.writeFile(ABSOLUTE_METADATA_PATH, csvText, 'utf8');
     } catch (error) {
       console.error('Error saving metadata:', error);
     }
