@@ -1,37 +1,77 @@
-# Project Alpha Team Contract
+### On-time Software Solutions
+We are a company delivering the best database style sites
+to hold all your video games or anything else you want to
+store.
 
-### Company:
-On-Time Software Solutions
+## Setup
+If you'd like to run the server on your own device, follow these steps:
 
-### Members:
+# Webserver
+1. Install Maven/Jetty (or any webserver of your choice).
+2. You will need to ensure your webserver DOES NOT open the `.csv` files
+For Jetty that requires a `jetty-context.xml`:
+```
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_3.dtd">
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+  <Call name="setInitParameter">
+    <Arg>org.eclipse.jetty.servlet.Default.excludePatterns</Arg>
+    <Arg>.*metadataGames\.csv|accounts\.csv|reviews\.csv</Arg>
+  </Call>
+</Configure>
+```
+which you can slot in to your `pom.xml` using `<contextXmlFile>${project.basedir}/jetty-context.xml</contextXmlFile>`.
+3. Ensure your `pom.xml` file is in your root directory.
 
-Rick Fraser, Saeem Patel, Mridul Sharma, Kseniya Kolokolkina, and Mathew Lee
-### Roles:
-Project Manager: Rick Fraser<br>
-Technical Manager: Mridul Sharma<br>
-Front-End Lead: Matthew Lee<br>
-Back-End Lead: Kseniya Kolokolkina<br>
-Software Quality Lead: Saeem Patel<br>
-Front-End Team: Matthew Lee, Saeem Patel, Rick Fraser<br>
-Back-End Lead: Kseniya Kolokolkina<br>
-Back-End Team: Kseniya Kolokolkina, Mridul Sharma, Rick Fraser<br>
-Software Quality Lead: Saeem Patel<br>
-Quality Team: Saeem Patel, Mirdul Sharma<br>
-Developers: All
+# API
+1. In your root folder run `npm init -y`.
+2. Install the following dependancies:
+```
+npm install cors
+npm install express
+npm install express-session
+npm install jsonwebtoken
+npm install multer
+npm install nodemailer
+npm install sharp
+```
 
-### Pipeline:
-Primary Languages: Python, Java, HTML, CSS<br>
-Repository: GitHub<br>
-Version Control: GitHub<br>
-Project Planning Board: GitHub Boards<br>
-Database Technology: SQL<br>
-Communication: Discord
+# Deploying the Servers
+1. Run your jetty server with `mvn jetty:run` in your terminal.
+2. Run the `server.js` file in `resources\database` with node.js.
+3. Go in your browsers and type in `localhost:3000/data` to see
+if `metadataGames.csv` loads in your browser. If it loads correctly,
+then your Jetty server (`localhost:8080` is default) should load
+the HTML pages.
 
-### Group Meetings:
-Tuesdays (10:00 am - 11:00 am) Boardroom ERC-2024<br>
-(Note: Please be there at 10:30 am for the weekly scrum.)
+## Feature List
 
-### Working Methods: 
-Pair programming (In-person, Tuesdays)<br> 
-Independent collaboration (With code review by a partner)<br>
-Discord collaboration (Online, Sundays)<br>
+# Home Page 
+- Slider 
+- Trending feed
+
+# Game Page
+- YouTube integration 
+- Dynamically loading information
+- CSV based data source
+- Cross-Environment CSV Loader in `loadMetadataGames.js` (equipped to handle node.js and browser)
+
+# Navbar 
+- Show filter searches with Console and Genre
+
+# Search Results (dynamically loading boxes from csv)
+- Advanced search logic (roman numerals and accents)
+- Sorting (title, release, rating)
+
+# Register for Accounts 
+- Show full process including verification
+
+# Logging into a Verified Account
+- Show icon change
+
+# Admin Account 
+- Show the add/edit game buttons
+
+# Admin Panel (adding games, updating games, deleting games) 
+- Show local csv changes
+- Show changes on `localhost:3000/data` and `localhost:3000/images/games/{id}/{banner/cover/ssn}.webp`
