@@ -112,6 +112,9 @@ class NavbarComponent extends HTMLElement {
             if (modalInstance) modalInstance.hide();
           }
           this.updateAccountBadge();
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         } else {
           alert(result.error);
         }
@@ -136,25 +139,19 @@ class NavbarComponent extends HTMLElement {
       if (isAdmin) {
         // Admin icon: person-fill-gear.
         newIconSVG = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" 
-               class="bi bi-person-fill-gear hover-effect" viewBox="0 0 16 16">
-            <path d="M10 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
-            <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-            <path d="M11.5 13a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-            <path d="M11.5 12a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-            <path d="M13.405 11.32a.5.5 0 0 0-.611-.21l-.645.258a2.5 2.5 0 0 0-.48-.278l-.097-.68a.5.5 0 0 0-.5-.436h-1.29a.5.5 0 0 0-.5.436l-.097.68a2.5 2.5 0 0 0-.48.278l-.645-.258a.5.5 0 0 0-.611.21l-.39.674a.5.5 0 0 0 .122.617l.516.4c-.028.157-.042.317-.042.48 0 .163.014.323.042.48l-.516.4a.5.5 0 0 0-.122.617l.39.674a.5.5 0 0 0 .611.21l.645-.258c.15.11.312.203.48.278l.097.68a.5.5 0 0 0 .5.436h1.29a.5.5 0 0 0 .5-.436l.097-.68a2.5 2.5 0 0 0 .48-.278l.645.258a.5.5 0 0 0 .611-.21l.39-.674z"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
+            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
           </svg>
         `;
       } else {
         // Regular logged in user: person-fill-check.
         newIconSVG = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" 
-               class="bi bi-person-fill-check hover-effect" viewBox="0 0 16 16">
-            <path d="M10 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
-            <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-            <path fill="none" stroke="currentColor" stroke-width="1" d="M6 9l2 2 4-4"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-fill-check" viewBox="0 0 16 16">
+            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+            <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
           </svg>
         `;
+        document.querySelector('#favourites').classList.remove('hide-fav'); 
       }
       accountAnchor.innerHTML = newIconSVG;
       // Update the dropdown to show a single "Sign Out" option.
@@ -178,6 +175,9 @@ class NavbarComponent extends HTMLElement {
               localStorage.setItem('isAdmin', 'false');
               alert("Logged out successfully.");
               this.updateAccountBadge();
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
             } else {
               alert("Error logging out: " + result.error);
             }
@@ -204,8 +204,9 @@ class NavbarComponent extends HTMLElement {
           <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">Sign In</a>
         </li>
       `;
+      document.querySelector('#favourites').classList.add('hide-fav');
     }
-  }  
+  }
 }
 
 customElements.define('navbar-component', NavbarComponent);

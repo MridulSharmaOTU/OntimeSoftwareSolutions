@@ -20,3 +20,6 @@
 .hover-effect:hover {
     fill: #000; /* Change color on hover */
 }
+.hide-fav {
+    display: none;
+}
