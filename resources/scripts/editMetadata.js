@@ -39,18 +39,32 @@ function convertToCSV(data) {
  */
 async function saveMetadata(data) {
   if (typeof process !== 'undefined' && process.versions != null && process.versions.node != null) {
-    // Node environment: dynamically import Node modules.
     const fs = await import('fs');
     const { ABSOLUTE_METADATA_PATH } = await import('../database/config.js');
 
     try {
       const csvText = convertToCSV(data);
-      await fs.promises.writeFile(ABSOLUTE_METADATA_PATH, csvText, 'utf8');
+      const tempPath = ABSOLUTE_METADATA_PATH + '.tmp';
+      
+      // Write CSV content to a temporary file.
+      await fs.promises.writeFile(tempPath, csvText, 'utf8');
+      
+      try {
+        // Attempt to rename the temp file to the target file.
+        await fs.promises.rename(tempPath, ABSOLUTE_METADATA_PATH);
+      } catch (renameError) {
+        if (renameError.code === 'EPERM') {
+          // If EPERM is thrown, try to remove the original file first.
+          await fs.promises.unlink(ABSOLUTE_METADATA_PATH);
+          await fs.promises.rename(tempPath, ABSOLUTE_METADATA_PATH);
+        } else {
+          throw renameError;
+        }
+      }
     } catch (error) {
       console.error('Error saving metadata:', error);
     }
   } else {
-    // Browser environment: file saving isn't supported.
     console.warn("saveMetadata: Running in browser environment. Skipping file save.");
     return;
   }

@@ -2,6 +2,6 @@
 .vscode/
 node_modules/
 .$classes_uml.drawio.bkp
-pom.xml
+*.xml
 __pycache__
 *.json
