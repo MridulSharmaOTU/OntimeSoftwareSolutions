@@ -8,6 +8,7 @@ If you'd like to run the server on your own device, follow these steps:
 
 ### Webserver
 1. Install Maven/Jetty (or any webserver of your choice).
+
 2. You will need to ensure your webserver DOES NOT open the `.csv` files
 For Jetty that requires a `jetty-context.xml`:
 ```
@@ -21,6 +22,7 @@ For Jetty that requires a `jetty-context.xml`:
 </Configure>
 ```
 which you can slot in to your `pom.xml` using `<contextXmlFile>${project.basedir}/jetty-context.xml</contextXmlFile>`.
+
 3. Ensure your `pom.xml` file is in your root directory.
 
 ### API
@@ -38,7 +40,9 @@ npm install sharp
 
 ### Deploying the Servers
 1. Run your jetty server with `mvn jetty:run` in your terminal.
+
 2. Run the `server.js` file in `resources\database` with node.js.
+
 3. Go in your browsers and type in `localhost:3000/data` to see
 if `metadataGames.csv` loads in your browser. If it loads correctly,
 then your Jetty server (`localhost:8080` is default) should load
