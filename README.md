@@ -1,4 +1,4 @@
-### On-time Software Solutions
+# On-time Software Solutions
 We are a company delivering the best database style sites
 to hold all your video games or anything else you want to
 store.
@@ -6,7 +6,7 @@ store.
 ## Setup
 If you'd like to run the server on your own device, follow these steps:
 
-# Webserver
+### Webserver
 1. Install Maven/Jetty (or any webserver of your choice).
 2. You will need to ensure your webserver DOES NOT open the `.csv` files
 For Jetty that requires a `jetty-context.xml`:
@@ -23,7 +23,7 @@ For Jetty that requires a `jetty-context.xml`:
 which you can slot in to your `pom.xml` using `<contextXmlFile>${project.basedir}/jetty-context.xml</contextXmlFile>`.
 3. Ensure your `pom.xml` file is in your root directory.
 
-# API
+### API
 1. In your root folder run `npm init -y`.
 2. Install the following dependancies:
 ```
@@ -36,7 +36,7 @@ npm install nodemailer
 npm install sharp
 ```
 
-# Deploying the Servers
+### Deploying the Servers
 1. Run your jetty server with `mvn jetty:run` in your terminal.
 2. Run the `server.js` file in `resources\database` with node.js.
 3. Go in your browsers and type in `localhost:3000/data` to see
@@ -46,32 +46,35 @@ the HTML pages.
 
 ## Feature List
 
-# Home Page 
+### Home Page 
 - Slider 
 - Trending feed
 
-# Game Page
+### Game Page
 - YouTube integration 
 - Dynamically loading information
 - CSV based data source
 - Cross-Environment CSV Loader in `loadMetadataGames.js` (equipped to handle node.js and browser)
 
-# Navbar 
-- Show filter searches with Console and Genre
+### Navbar 
+- Filter searches with Console and Genre
 
-# Search Results (dynamically loading boxes from csv)
+### Search Results (dynamically loading boxes from csv)
 - Advanced search logic (roman numerals and accents)
 - Sorting (title, release, rating)
 
-# Register for Accounts 
-- Show full process including verification
+### Register for Accounts 
+- Full process works
+- Including email verification
 
 # Logging into a Verified Account
-- Show icon change
+- Icon changes when logged into the website
 
 # Admin Account 
-- Show the add/edit game buttons
+- Icon changes to show admin account
+- Shows the add/edit game buttons
 
 # Admin Panel (adding games, updating games, deleting games) 
-- Show local csv changes
-- Show changes on `localhost:3000/data` and `localhost:3000/images/games/{id}/{banner/cover/ssn}.webp`
+- Changes are made to the local `metadataGames.csv` file
+- Pictures are uploaded to `resources\images\games\{id}\{cover/banner/ssn}.webp` 
+- Changes are reflected on `localhost:3000/data` and `localhost:3000/images/games/{id}/{banner/cover/ssn}.webp`
