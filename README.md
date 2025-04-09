@@ -4,7 +4,7 @@ to hold all your video games or anything else you want to
 store.
 
 ## Setup
-If you'd like to run the server on your own device, follow these steps:
+If you'd like to run the server on your own device, follow these steps: 
 
 ### Webserver
 1. Install Maven/Jetty (or any webserver of your choice).
